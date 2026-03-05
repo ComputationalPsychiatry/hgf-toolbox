@@ -13,7 +13,7 @@ function [logp, yhat, res] = tapas_logrt_linear_binary_minimal(r, infStates, ptr
 be0  = ptrans(1);
 be1  = ptrans(2);
 be2  = ptrans(3);
-ze   = exp(ptrans(6));
+ze   = exp(ptrans(4));
 
 % Initialize returned log-probabilities, predictions,
 % and residuals as NaNs so that NaN is returned for all

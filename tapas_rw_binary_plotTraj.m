@@ -20,21 +20,36 @@ figure(...
 % Number of trials
 t = length(r.u(:,1));
 
+% check what kind of responses and scale according
+if ~isempty(find(strcmp(fieldnames(r),'y'))) && ~isempty(r.y) % if there are responses
+    if length(unique(r.y))==2 && all(unique(r.y)==[0;1]) % if binary
+        y = r.y(:,1) -0.5; y = 1.16 *y; y = y +0.5; % stretch
+        resp_type = "binary";
+    else
+        y = 0.95.*(r.y-0.5)+0.5;
+        resp_type = "cont";
+    end
+end
+
 % Plot
 plot(0:t, [r.p_prc.v_0; r.traj.v], 'r', 'LineWidth', 2);
 hold all;
 plot(0, r.p_prc.v_0, 'or', 'LineWidth', 2); % prior
 plot(1:t, r.u(:,1), '.', 'Color', [0 0.6 0]); % inputs
 if ~isempty(find(strcmp(fieldnames(r),'y'))) && ~isempty(r.y)
-    y = r.y(:,1) -0.5; y = 1.16 *y; y = y +0.5; % stretch
     if ~isempty(find(strcmp(fieldnames(r),'irr')))
         y(r.irr) = NaN; % weed out irregular responses
         plot(r.irr,  1.08.*ones([1 length(r.irr)]), 'x', 'Color', [1 0.7 0], 'Markersize', 11, 'LineWidth', 2); % irregular responses
         plot(r.irr, -0.08.*ones([1 length(r.irr)]), 'x', 'Color', [1 0.7 0], 'Markersize', 11, 'LineWidth', 2); % irregular responses
     end
     plot(1:t, y, '.', 'Color', [1 0.7 0]); % responses
+    if resp_type == "binary"
     title(['Response y (orange), input u (green), and value v (red) for alpha=', ...
            num2str(r.p_prc.al), ', v_0=', num2str(r.p_prc.v_0)], 'FontWeight', 'bold');
+    elseif resp_type == "cont"
+        title(['Transf response y (orange), input u (green), and value v (red) for alpha=', ...
+           num2str(r.p_prc.al), ', v_0=', num2str(r.p_prc.v_0)], 'FontWeight', 'bold');
+    end
     ylabel('y, u, v');
     axis([0 t -0.15 1.15]);
 else
