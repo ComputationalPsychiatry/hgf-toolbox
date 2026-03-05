@@ -37,9 +37,18 @@ hgf_demo.pdf.
 
 ## Release notes
 
+### v7.2
+- Switched to MIT licence
+- Fix MIT licence file
+- Update seed in fitModel
+- Remove unneeded return statements at the end of files
+- Undo mistaken LME calculation bugfix
+- Minor bug fixes and additions
+
 ### v7.1
 - Add ehgf_ar1_plotTraj
 - Bugfix
+
 ### v7.0
 - Numerical stability improvements to optimization
 - Combined response models (more than one observation per trial)
