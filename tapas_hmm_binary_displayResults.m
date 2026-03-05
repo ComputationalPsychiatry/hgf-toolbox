@@ -1,14 +1,6 @@
 function tapas_hmm_binary_displayResults(r)
 % Displays results estimated by fitModel for the hmm perceptual model in the binary case
 % Usage:  est = fitModel(responses, inputs); hmm_binary_displayResults(est);
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Print transition matrix
 Ared  = r.p_prc.Ared';

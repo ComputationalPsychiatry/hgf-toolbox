@@ -1,14 +1,6 @@
 function [logp, yhat, res] = tapas_logrt_linear_whatworld(r, infStates, ptrans)
 % Calculates the log-probability of log-reaction times y (in units of log-ms) according to the
 % linear log-RT model developed with Louise Marshall and Sven Bestmann
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2014 Christoph Mathys, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Transform zetas to their native space
 be0  = ptrans(1);

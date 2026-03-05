@@ -1,14 +1,6 @@
 function [logp, yhat, res] = tapas_cdfgaussian_obs(r, infStates, ptrans)
 % Calculates the log-probability of response y under a cumulative Gaussian distribution. This
 % model has no free parameters.
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2015 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Initialize returned log-probabilities as NaNs so that NaN is
 % returned for all irregualar trials

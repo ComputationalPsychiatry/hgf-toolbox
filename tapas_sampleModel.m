@@ -1,30 +1,15 @@
 function r = tapas_sampleModel(inputs, varargin)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Samples prior values from the prior provided in the configurations of the perceptual and
 % (optionally) the response model and returns the implied belief trajectories (and simulated
 % responses, if a response model was specified).
-%
 % USAGE:
 %     est = tapas_sampleModel(inputs, perceptual_config, observational_config, seed)
-% 
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2020 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Store responses, inputs, and information about irregular trials in newly
 % initialized structure r
-%
 r = dataPrep(inputs);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % THE DEFAULTS DEFINED HERE WILL BE OVERWRITTEN BY ANY ARGUMENTS GIVEN WHEN CALLING tapas_fitModel.m
-%
 % Default perceptual model
 % ~~~~~~~~~~~~~~~~~~~~~~~~
 r.c_prc = tapas_ehgf_binary_config;
@@ -33,7 +18,6 @@ r.c_prc = tapas_ehgf_binary_config;
 % ~~~~~~~~~~~~~~~~~~~~~~~~~
 r.c_obs = [];
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Override default settings with arguments from the command line
 if nargin > 1 && ~isempty(varargin{1})
@@ -124,7 +108,6 @@ end
 
 end % function tapas_sampleModel
 
-% --------------------------------------------------------------------------------------------------
 function r = dataPrep(inputs)
 
 % Initialize data structure to be returned

@@ -2,19 +2,10 @@ function c = tapas_align_priors_fields(c)
 % Aligns parameter fields with the explicit prior definitions with the 
 % content of the vectors c.priormus and c.priorsas (vice-versa of function 
 % 'tapas_align_priors.m').
-%
 %   Example:
 %   >> c_prc = tapas_ehgf_binary_config;
 %   >> c_prc.priormus(13) = -2;
 %   >> c_prc = tapas_align_priors_fields(c_prc)
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2020 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 
 % Get fieldnames. If a name ends on 'mu', that field defines a prior mean.

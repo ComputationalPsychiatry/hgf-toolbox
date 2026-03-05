@@ -1,7 +1,6 @@
 function optim = tapas_quasinewton_optim(f, init, varargin)
 % This function implements the quasi-Newton minimization algorithm
 % introduced by Broyden, Fletcher, Goldfarb, and Shanno (BFGS).
-%
 % INPUT:
 %     f            Function handle of the function to be optimised
 %     init         The point at which to initialize the algorithm
@@ -12,21 +11,12 @@ function optim = tapas_quasinewton_optim(f, init, varargin)
 %       maxIter    Maximum number of iterations
 %       maxRegu    Maximum number of regularizations
 %       verbose    Boolean flag to turn output on (true) or off (false)
-%
 % OUTPUT:
 %     optim        Structure containing results in the following fields
 %       valMin     The value of the function at its minimum
 %       argMin     The argument of the function at its minimum
 %       T          The inverse Hessian at the minimum calculated as a
 %                  byproduct of optimization
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2019 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Dimension count
 n = length(init);

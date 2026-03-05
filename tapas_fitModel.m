@@ -1,38 +1,25 @@
 function r = tapas_fitModel(responses, inputs, varargin)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % This is the main function for fitting the parameters of a combination of perceptual and
 % observation models, given inputs and responses.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % USAGE:
 %     est = tapas_fitModel(responses, inputs)
-% 
 % INPUT ARGUMENTS:
 %     responses          Array of binary responses (column vector)
 %     inputs             Array of inputs (column vector)
-%
 %                        Code irregular (missed, etc.) responses as NaN. Such responses will be
 %                        ignored. However, the trial as such will not be ignored and filtering will
 %                        take place based on the input.
-%
 %                        To ignore a trial, code the input as NaN. In this case, filtering is
 %                        suspended for this trial and all representations (i.e., inferences on
 %                        hidden states) will remain constant.
-%
 %                        Note that an input is often a composite event, for example a cue-stimulus
 %                        contingency. If the agent you are modeling is lerning such contingencies,
 %                        inputs have to be coded in contingency space (e.g., blue cue -> reward as
 %                        well as green cue -> no reward is coded as 1 while blue cue -> no reward as
 %                        well as green cue -> reward is coded as 0). The same applies to responses.
-%
 %                        If needed for a specific application, responses and inputs can be
 %                        matrices with further columns. The coding of irregular and ignored
 %                        trials described above then applies to their first column.
-%
 % OUTPUT:
 %     est.u              Input to agent (i.e., the inputs array from the arguments)
 %     est.y              Observed responses (i.e., the responses array from the arguments)
@@ -53,84 +40,58 @@ function r = tapas_fitModel(responses, inputs, varargin)
 %                        (see the configuration file of your chosen observation model for details)
 %     est.traj:          Trajectories of the environmental states tracked by the perceptual model
 %                        (see the configuration file of that model for details)
-%
 % CONFIGURATION:
 %     In order to fit a model in this framework, you have to make three choices:
-%
 %     (1) a perceptual model,
 %     (2) an observation model, and
 %     (3) an optimization algorithm.
-%
 %     The perceptual model can for example be a Bayesian generative model of the states of an
 %     agent's environment (like the Hierarchical Gaussian Filter (HGF)) or a reinforcement learning
 %     algorithm (like Rescorla-Wagner (RW)). It describes the states or values that
 %     probabilistically determine observed responses.
-%
 %     The observation model describes how the states or values of the perceptual model map onto
 %     responses. Examples are the softmax decision rule or the closely related unit-square sigmoid
 %     decision model.
-%
 %     The optimization algorithm is used to determine the maximum-a-posteriori (MAP) estimates of
 %     the parameters of both the perceptual and decision models. Its objective function is the
 %     unnormalized log-posterior of all perceptual and observation parameters, given the data and
 %     the perceptual and observation models. This corresponds to the log-joint of data and
 %     parameters, given the models.
-%
 %     Perceptual and observation models have to be chosen so that they are compatible, while the
 %     choice of optimization algorithm is independent. To choose a particular combination, make
 %     your changes to the configuration section of this file below. Compatibility information can
 %     be found there.
-%
 %     Once you have made your choice, go to the relevant configuration files (e.g.,
 %     tapas_hgf_binary_config.m for a choice of r.c_prc = tapas_hgf_binary_config), read the model- and
 %     algorithm-specific information there, and configure accordingly.
-%
 %     The choices configured below can be overriden on the command line. Usage then is:
-%
 %     est = tapas_fitModel(responses, inputs, prc_model, obs_model, opt_algo)
-%
 %     where the last three arguments are strings containing the names of the corresponding
 %     configuration files (without the extension .m).
-%
 % NEW DATASETS:
 %     When analyzing a new dataset, take your inputs and use 'tapas_bayes_optimal_config' (or
 %     'tapas_bayes_optimal_binary_config' for binary inputs) as your observation model. This determines
 %     the Bayes optimal perceptual parameters (given your current priors, so choose them wide and
 %     loose to let the inputs influence the result). You can then use the optimal parameters as your
 %     new prior means for the perceptual parameters.
-%
 % PLOTTING OF RESULTS:
 %     To plot the trajectories of the inferred perceptual states (as implied by the estimated
 %     parameters), there is a function <modelname>_plotTraj(...) for each perceptual model. This
 %     takes the structure returned by tapas_fitModel(...) as its only argument.
-%
 %     Additionally, the function tapas_fit_plotCorr(...) plots the posterior correlation of the
 %     estimated parameters. It takes the structure returned by tapas_fitModel(...) as its only
 %     argument. Note that this function only works if the optimization algorithm makes the
 %     posterior correlation available in est.optim.Corr.
-%
 % EXAMPLE:
 %     est = tapas_fitModel(responses, inputs)
 %     tapas_hgf_binary_plotTraj(est)
 %     tapas_fit_plotCorr(est)
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2015 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Store responses, inputs, and information about irregular trials in newly
 % initialized structure r
 r = dataPrep(responses, inputs);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % THE DEFAULTS DEFINED HERE WILL BE OVERWRITTEN BY ANY ARGUMENTS GIVEN WHEN CALLING tapas_fitModel.m
-%
 % Default perceptual model
 % ~~~~~~~~~~~~~~~~~~~~~~~~
 r.c_prc = tapas_ehgf_binary_config;
@@ -144,9 +105,6 @@ r.c_obs = tapas_unitsq_sgm_config;
 r.c_opt = tapas_quasinewton_optim_config;
 
 % END OF CONFIGURATION
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Override default settings with arguments from the command line
 if nargin > 2 && ~isempty(varargin{1})
@@ -247,7 +205,6 @@ disp(' ')
 
 end % function tapas_fitModel
 
-% --------------------------------------------------------------------------------------------------
 function r = dataPrep(responses, inputs)
 
 % Initialize data structure to be returned
@@ -332,7 +289,6 @@ end
 
 end % function dataPrep
 
-% --------------------------------------------------------------------------------------------------
 function r = optim(r, prc_fun, obs_fun, opt_algo)
 
 % Determine indices of parameters to optimize (i.e., those that are not fixed or NaN)
@@ -457,7 +413,6 @@ r.optim.BIC  = 2*r.optim.negLl +d*log(ndp);
 
 end % function optim
 
-% --------------------------------------------------------------------------------------------------
 function [negLogJoint, negLogLl, rval, err, trialLogLlsplit] = negLogJoint(r, prc_fun, obs_fun, ptrans_prc, ptrans_obs)
 % Returns the the negative log-joint density for perceptual and observation parameters
 
@@ -520,7 +475,6 @@ rval = 0;
 
 end % function negLogJoint
 
-% --------------------------------------------------------------------------------------------------
 function optres = optimrun(nlj, init, opt_idx, opt_algo, c_opt)
 % Does one run of the optimization algorithm and returns results
 
@@ -610,15 +564,12 @@ optres.comp = optres.accu -LME;
 
 end % function optimrun
 
-% --------------------------------------------------------------------------------------------------
 function val = restrictfun(f, arg, free_idx, free_arg)
 % This is a helper function for the construction of file handles to
 % restricted functions.
-%
 % It returns the value of a function restricted to subset of the
 % arguments of the input function handle. The input handle takes
 % *one* vector as its argument.
-% 
 % INPUT:
 %   f            The input function handle
 %   arg          The argument vector for the input function containing the
