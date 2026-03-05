@@ -38,4 +38,3 @@ c.obs_fun = @tapas_squared_pe;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_squared_pe_transp;
 
-return;

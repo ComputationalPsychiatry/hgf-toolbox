@@ -8,4 +8,3 @@ pstruct.mu_0      = pvec(2);
 pstruct.om        = pvec(3);
 pstruct.pi_u      = pvec(4);
 
-return;

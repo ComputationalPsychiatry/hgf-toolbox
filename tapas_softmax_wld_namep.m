@@ -6,4 +6,3 @@ pstruct.be    = pvec(1);
 pstruct.la_wd = pvec(2);
 pstruct.la_ld = pvec(3);
 
-return;

@@ -300,4 +300,3 @@ infStates(:,1,8)  = traj.sax(:,1);
 infStates(:,1,9)  = traj.mua(:,1);
 infStates(:,1,10) = traj.saa(:,1);
 
-return;

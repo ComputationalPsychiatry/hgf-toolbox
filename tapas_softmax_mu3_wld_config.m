@@ -41,4 +41,3 @@ c.obs_fun = @tapas_softmax_mu3_wld;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_softmax_mu3_wld_transp;
 
-return;

@@ -44,4 +44,3 @@ logp(reg) = log(mllh);
 yhat(reg) = mllh;
 res(reg) = -log(mllh);
 
-return;

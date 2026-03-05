@@ -20,4 +20,3 @@ end
 % Simulate
 y = muhat +sqrt(ze)*randn(n, 1);
 
-return;

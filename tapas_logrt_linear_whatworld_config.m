@@ -57,4 +57,3 @@ c.obs_fun = @tapas_logrt_linear_whatworld;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_logrt_linear_whatworld_transp;
 
-return;

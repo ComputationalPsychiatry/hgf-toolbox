@@ -21,4 +21,3 @@ pstruct.om        = pvec(5*l:6*l-1);
 pvec(6*l)         = exp(ptrans(6*l));                      % al
 pstruct.al        = pvec(6*l);
 
-return;

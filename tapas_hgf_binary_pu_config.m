@@ -171,4 +171,3 @@ c.prc_fun = @tapas_hgf_binary_pu;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_hgf_binary_pu_transp;
 
-return;

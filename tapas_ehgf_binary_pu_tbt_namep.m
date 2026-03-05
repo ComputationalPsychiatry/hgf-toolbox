@@ -18,4 +18,3 @@ pstruct.om        = pvec(4*l:5*l-1);
 pstruct.eta0      = pvec(5*l);
 pstruct.eta1      = pvec(5*l+1);
 
-return;

@@ -67,4 +67,3 @@ c.prc_fun = @tapas_rw_binary_dual;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_rw_binary_dual_transp;
 
-return;

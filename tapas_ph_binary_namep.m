@@ -6,4 +6,3 @@ pstruct.v_0   = pvec(1);
 pstruct.al_0  = pvec(2);
 pstruct.S     = pvec(3);
 
-return;

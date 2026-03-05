@@ -88,4 +88,3 @@ traj.vhat  = vhat;
 % Create matrix (in this case: vector) needed by observation model
 infStates = traj.vhat;
 
-return;

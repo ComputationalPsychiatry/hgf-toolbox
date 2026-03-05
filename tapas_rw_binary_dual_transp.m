@@ -10,4 +10,3 @@ pstruct.al    = pvec(3);
 pvec(4)       = tapas_sgm(ptrans(4),1);   % kappa
 pstruct.ka    = pvec(4);
 
-return;

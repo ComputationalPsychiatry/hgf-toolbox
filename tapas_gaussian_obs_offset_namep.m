@@ -5,4 +5,3 @@ pstruct = struct;
 pstruct.ze = pvec(1);
 pstruct.la = pvec(2);
 
-return;

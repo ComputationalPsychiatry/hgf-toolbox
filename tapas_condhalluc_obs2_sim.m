@@ -28,4 +28,3 @@ end
 % Simulate
 y = binornd(1, prob);
 
-return;

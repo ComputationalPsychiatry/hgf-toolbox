@@ -22,4 +22,3 @@ pstruct.eta0      = pvec(5*l);
 pvec(5*l+1)       = ptrans(5*l+1);                         % eta1
 pstruct.eta1      = pvec(5*l+1);
 
-return;

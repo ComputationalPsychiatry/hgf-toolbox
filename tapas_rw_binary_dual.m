@@ -75,4 +75,3 @@ infstates = NaN(n-1,1,2,1,1);
 infStates(:,1,1,1,1) = vhat(:,1);
 infStates(:,1,2,1,1) = vhat(:,2);
 
-return;

@@ -274,4 +274,3 @@ optim.argMin = x;
 optim.T      = T;
 optim.iter   = iter;
 
-return;

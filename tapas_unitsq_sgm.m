@@ -37,4 +37,3 @@ logp(reg) = y.*ze.*(logx -log1mx) +ze.*log1mx -log((1-x).^ze +x.^ze);
 yhat(reg) = x;
 res(reg) = (y-x)./sqrt(x.*(1-x));
 
-return;

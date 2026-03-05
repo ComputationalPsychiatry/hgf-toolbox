@@ -6,4 +6,3 @@ end
     
 y = log(x./(a-x));
 
-return;

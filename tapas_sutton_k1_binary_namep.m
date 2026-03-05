@@ -7,4 +7,3 @@ pstruct.Rhat    = pvec(2);
 pstruct.vhat_1   = pvec(3);
 pstruct.h_1    = pvec(4);
 
-return;

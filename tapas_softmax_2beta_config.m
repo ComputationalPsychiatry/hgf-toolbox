@@ -35,4 +35,3 @@ c.obs_fun = @tapas_softmax_2beta;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_softmax_2beta_transp;
 
-return;

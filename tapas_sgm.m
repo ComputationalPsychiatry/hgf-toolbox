@@ -2,4 +2,3 @@ function y = tapas_sgm(x, a)
 
 y = a./(1+exp(-x));
 
-return;

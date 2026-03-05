@@ -81,4 +81,3 @@ traj.alprhat = alprhat;
 % Create matrix needed by observation model
 infStates = traj.alpr;
 
-return;

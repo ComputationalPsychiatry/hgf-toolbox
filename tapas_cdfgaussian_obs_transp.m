@@ -4,4 +4,3 @@ function [pvec, pstruct] = tapas_cdfgaussian_obs_transp(r, ptrans)
 pvec    = [];
 pstruct = struct;
 
-return;

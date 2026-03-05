@@ -38,4 +38,3 @@ end
 % Simulate
 y = betarnd(al, be);
 
-return;

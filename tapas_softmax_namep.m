@@ -4,4 +4,3 @@ pstruct = struct;
 
 pstruct.be = pvec(1);
 
-return;

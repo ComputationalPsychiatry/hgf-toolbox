@@ -137,4 +137,3 @@ c.prc_fun = @hhmm;
 % from the space they are estimated in
 c.transp_prc_fun = @hhmm_transp;
 
-return;

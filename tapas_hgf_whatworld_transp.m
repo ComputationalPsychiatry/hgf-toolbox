@@ -23,4 +23,3 @@ pstruct.om         = pvec(2*ntr+4);
 pvec(2*ntr+5)      = tapas_sgm(ptrans(2*ntr+5),r.c_prc.thub); % th
 pstruct.th         = pvec(2*ntr+5);
 
-return;

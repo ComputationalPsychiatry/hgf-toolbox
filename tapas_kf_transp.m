@@ -13,4 +13,3 @@ pstruct.om      = pvec(3);
 pvec(4)         = exp(ptrans(4));                      % pi_u
 pstruct.pi_u    = pvec(4);
 
-return;

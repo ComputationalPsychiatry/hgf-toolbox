@@ -77,4 +77,3 @@ infStates(:,1) = traj.vhat;
 infStates(:,2) = traj.v;
 infStates(:,3) = traj.al;
 
-return;

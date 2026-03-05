@@ -26,4 +26,3 @@ c.optIter = 1;
 % Algorithm filehandle
 c.opt_algo = @tapas_quasinewton_optim;
 
-return;

@@ -180,4 +180,3 @@ c.prc_fun = @tapas_hgf_ar1_mab;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_hgf_ar1_mab_transp;
 
-return;

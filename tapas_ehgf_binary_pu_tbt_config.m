@@ -167,4 +167,3 @@ c.prc_fun = @tapas_ehgf_binary_pu_tbt;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_ehgf_binary_pu_tbt_transp;
 
-return;

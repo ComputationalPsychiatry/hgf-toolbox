@@ -21,4 +21,3 @@ end
 % Simulate
 y = yhat +sqrt(ze)*randn(n, 1);
 
-return;

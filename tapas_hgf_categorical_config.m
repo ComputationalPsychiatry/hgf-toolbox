@@ -149,4 +149,3 @@ c.prc_fun = @tapas_hgf_categorical;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_hgf_categorical_transp;
 
-return;

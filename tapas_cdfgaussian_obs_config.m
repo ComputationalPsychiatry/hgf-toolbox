@@ -24,4 +24,3 @@ c.obs_fun = @tapas_cdfgaussian_obs;
 % This is the handle to a dummy function since there are no parameters to transform
 c.transp_obs_fun = @tapas_cdfgaussian_obs_transp;
 
-return;

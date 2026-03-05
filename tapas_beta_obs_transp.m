@@ -6,4 +6,3 @@ pstruct = struct;
 pvec(1)      = exp(ptrans(1));         % nupr
 pstruct.nupr = pvec(1);
 
-return;

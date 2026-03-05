@@ -4,4 +4,3 @@ function [pvec, pstruct] = tapas_bayes_optimal_whichworld_transp(r, ptrans)
 pvec    = [];
 pstruct = struct;
 
-return;
