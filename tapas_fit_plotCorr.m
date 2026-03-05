@@ -3,14 +3,6 @@ function tapas_fit_plotCorr(r)
 % This is estimated by calculating the Hessian at the MAP estimate. The negative inverse of the
 % Hessian is the parameter covariance, which is standardized to yield the correlation.
 % Usage:  est = tapas_fitModel(responses, inputs); tapas_fit_plotCorr(est);
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Set up display
 scrsz = get(0,'screenSize');

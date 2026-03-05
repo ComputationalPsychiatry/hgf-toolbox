@@ -1,47 +1,32 @@
 function c = tapas_hgf_config
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Contains the configuration for the Hierarchical Gaussian Filter (HGF)
 % for continuous inputs.
-%
 % The HGF is the model introduced in 
-%
 % Mathys C, Daunizeau J, Friston, KJ, and Stephan KE. (2011). A Bayesian foundation
 % for individual learning under uncertainty. Frontiers in Human Neuroscience, 5:39.
-%
 % This file refers to CONTINUOUS inputs (Eqs 48ff in Mathys et al., (2011));
 % for binary inputs, refer to tapas_hgf_binary_config.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % The HGF configuration consists of the priors of parameters and initial values. All priors are
 % Gaussian in the space where the quantity they refer to is estimated. They are specified by their
 % sufficient statistics: mean and variance (NOT standard deviation).
-% 
 % Quantities are estimated in their native space if they are unbounded (e.g., the omegas). They are
 % estimated in log-space if they have a natural lower bound at zero (e.g., the sigmas).
-% 
 % Parameters can be fixed (i.e., set to a fixed value) by setting the variance of their prior to
 % zero. Aside from being useful for model comparison, the need for this arises whenever the scale
 % and origin at the j-th level are arbitrary. This is the case if the observation model does not
 % contain the representations mu_j and sigma_j. A choice of scale and origin is then implied by
 % fixing the initial value mu_j_0 of mu_j and either kappa_j-1 or omega_j-1.
-%
 % Fitted trajectories can be plotted by using the command
-%
 % >> tapas_hgf_plotTraj(est)
-% 
 % where est is the stucture returned by tapas_fitModel. This structure contains the estimated
 % perceptual parameters in est.p_prc and the estimated trajectories of the agent's
 % representations (cf. Mathys et al., 2011). Their meanings are:
-%              
 %         est.p_prc.mu_0       row vector of initial values of mu (in ascending order of levels)
 %         est.p_prc.sa_0       row vector of initial values of sigma (in ascending order of levels)
 %         est.p_prc.rho        row vector of rhos (representing drift; in ascending order of levels)
 %         est.p_prc.ka         row vector of kappas (in ascending order of levels)
 %         est.p_prc.om         row vector of omegas (in ascending order of levels)
 %         est.p_prc.pi_u       pi_u (input precision = 1/alpha)
-%
 %         est.traj.mu          mu (rows: trials, columns: levels)
 %         est.traj.sa          sigma (rows: trials, columns: levels)
 %         est.traj.muhat       prediction of mu (rows: trials, columns: levels)
@@ -55,37 +40,17 @@ function c = tapas_hgf_config
 %         est.traj.epsi        precision-weighted prediction errors  (rows: trials, columns: levels)
 %         est.traj.wt          full weights on prediction errors (at the first level,
 %                                  this is the learning rate) (rows: trials, columns: levels)
-%
 % Tips:
-% - When analyzing a new dataset, take your inputs u and use
-%
 %   >> est = tapas_fitModel([], u, 'tapas_hgf_config', 'tapas_bayes_optimal_config');
-%
 %   to determine the Bayes optimal perceptual parameters (given your current priors as defined in
 %   this file here, so choose them wide and loose to let the inputs influence the result). You can
 %   then use the optimal parameters as your new prior means for the perceptual parameters.
-%
-% - If you get an error saying that the prior means are in a region where model assumptions are
 %   violated, lower the prior means of the omegas, starting with the highest level and proceeding
 %   downwards.
-%
-% - Alternatives are lowering the prior means of the kappas, if they are not fixed, or adjusting
 %   the values of the kappas or omegas, if any of them are fixed.
-%
-% - If the log-model evidence cannot be calculated because the Hessian poses problems, look at
 %   est.optim.H and fix the parameters that lead to NaNs.
-%
-% - Your guide to all these adjustments is the log-model evidence (LME). Whenever the LME increases
 %   by at least 3 across datasets, the adjustment was a good idea and can be justified by just this:
 %   the LME increased, so you had a better model.
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 
 % Config structure
@@ -110,7 +75,6 @@ c.irregular_intervals = false;
 % derived from the inputs. This can be achieved by
 % using placeholder values. The available placeholders
 % are:
-%
 % 99991   Value of the first input
 %         Usually a good choice for mu_0mu(1)
 % 99992   Variance of the first 20 inputs

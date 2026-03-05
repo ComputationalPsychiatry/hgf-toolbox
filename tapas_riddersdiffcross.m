@@ -1,36 +1,24 @@
 function [dcrf, err] = tapas_riddersdiffcross(f, x, varargin)
 % Calculates the cross-derivative (i.e., d^2f/(dx_1dx_2)) of the function f at point x
 % according to Ridders' method:
-%
 % Ridders, CJF. (1982). Accurate computation of F'(x) and F'(x) F''(x). Advances in Engineering
 %     Software, 4(2), 75-6.
-%
 % INPUT:
 %    f             Function handle of a scalar real function of *two* real variables
 %                  which are passed as *one* vector with two elements
 %    x             Point at which to differentiate f
-%
 % OUTPUT:
 %    dcrf          Cross-derivative of f at x
 %    err           Error estimate
-%
 % OPTIONS:
 %    Optionally, the third argument of the function can be a structure containing further
 %    settings for Ridder's method.
-%
 %    varargin{1}.init_h      Initial finite difference (default: 1)
 %    varargin{1}.div         Divisor used to reduce h on each step (default: 1.2)
 %    varargin{1}.min_steps   Minimum number of steps in h (default: 3)
 %    varargin{1}.max_steps   Maximum number of steps in h (default: 100)
 %    varargin{1}.tf          Terminate if last step worse than preceding by a factor of tf
 %                            (default: 2)
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is released under the terms of the GNU General Public Licence (GPL), version 3. You can
-% redistribute it and/or modify it under the terms of the GPL (either version 3 or, at your option,
-% any later version). For further details, see the file COPYING or <http://www.gnu.org/licenses/>.
     
     % Defaults
     init_h     = 1;

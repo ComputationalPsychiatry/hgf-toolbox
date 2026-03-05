@@ -1,13 +1,5 @@
 function [logp, yhat, res] = tapas_condhalluc_obs3(r, infStates, ptrans)
 % Calculates the log-probability of response y=1 under the unit-square sigmoid model
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2020 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Transform alpha and beta to their native spaces
 be = exp(ptrans(1));

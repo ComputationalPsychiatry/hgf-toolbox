@@ -1,16 +1,9 @@
 function c = tapas_hhmm_config
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Contains the configuration for the hierarchical hidden Markov model (HHMM)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % This implementation follows the exposition in Fine, Singer, & Tishby (1998). The hierarchical
 % hidden Markov model: Analysis and Applications. Machine Learning, 32, 41–62.
-%
 % The structure returned by fitModel() contains the estimated transition matrices A (responsible for
 % horizontal transitions), the vertical transition probabilities V and the outcome contingencies B.
-%
 % The configuration is best explained by way of example, so please see the template below. Briefly,
 % the model tree is configured as a cell array N of nodes. Each node therefore has its unique id,
 % namely its position in that array. Id 1 (the first position) is reserved for the root node. Apart
@@ -20,7 +13,6 @@ function c = tapas_hhmm_config
 % for sanity checking. That said, while some sanity checking is done, it is your responsibility
 % to define a tree that makes sense. The nodes at the bottom of the tree (the ones generating
 % output) are called production nodes.
-%
 % Estimated quantities are the vertical transition probabilities V (called pi in Fine et
 % al. (1998)), the transition matrices A, and the outcome contingencies B of the production
 % nodes. Each node, except the root, has N{id}.V, containing the prior for V (Gaussian in
@@ -29,14 +21,6 @@ function c = tapas_hhmm_config
 % transition matrix between its children, also in logit space. Production nodes have N{id}.B, the
 % outcome contingency vector. V is an empty array for the root node, A is empty for production
 % nodes, and B is empty for non-production nodes.
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Config structure
 c = struct;
@@ -48,7 +32,6 @@ c.model = 'hhmm';
 c.n_outcomes = 2;
 
 % Model tree (N is for node)
-%
 % The root node is the first element of the cell array of nodes
 c.N{1} = struct;
 

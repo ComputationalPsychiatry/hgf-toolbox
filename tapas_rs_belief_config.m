@@ -1,25 +1,11 @@
 function c = tapas_rs_belief_config
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Contains the configuration for the 'belief' response model according to:
-%
 % Vossel, S.*, Mathys, C.*, Daunizeau, J., Bauer, M., Driver, J., Friston, K. J., and Stephan, K. E.
 % (2013). Spatial Attention, Precision, and Bayesian Inference: A Study of Saccadic Response Speed.
 % Cerebral Cortex.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % The Gaussian noise observation model assumes that responses have a Gaussian distribution around
 % the inferred mean of the relevant state. The only parameter of the model is the noise variance
 % (NOT standard deviation) zeta.
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 
 % Config structure
@@ -29,7 +15,6 @@ c = struct;
 c.model = 'Response speed: belief';
 
 % Sufficient statistics of Gaussian parameter priors
-%
 % Zeta_1_valid
 c.logze1vmu = log(0.0052);
 c.logze1vsa = 0.1;

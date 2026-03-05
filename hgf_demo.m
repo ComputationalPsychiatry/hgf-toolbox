@@ -21,12 +21,10 @@ axis([1, 320, -0.1, 1.1])
 % surprise for a given input sequence $u$. This means that an agent using this 
 % parameter setting would experience the least possible surprise when exposed 
 % to the given inputs under the given perceptual model.
-% 
 % The point of estimating the optimal parameter values is that we can use them 
 % as prior means when fitting observed responses. If the agents whose response 
 % we're observing are reasonably well able to perform their task, we may assume 
 % that their parameter values are distributed around the optimal values.
-% 
 % We provide fitModel with four arguments.
 %% 
 % * The first argument, which would normally be the observed responses, is empty 
@@ -55,12 +53,10 @@ bopars = tapas_fitModel([],...
 % At the second level, we find an optimal value of, for example, $\omega_2=-3.43$, 
 % and at the third level one of, for example, $\omega_3=-6.01$ (this will vary 
 % on different runs of this script).
-% 
 % The other parameters are fixed to a particular value because their prior variance 
 % has been set to zero in the configuration file _tapas_hgf_binary_config.m._ 
 % This means that their posterior means, displayed here, are the same as the prior 
 % means set in _tapas_hgf_binary_config.m_.
-% 
 % Their meanings are
 %% 
 % * $\mu_0$ and $\sigma_0$ are the initial values of the perceptual state
@@ -133,7 +129,6 @@ est = tapas_fitModel(sim.y, sim.u, hgf_binary_config, unitsq_sgm_config, optim_c
 % values on the diagonal of the correlation matrix are all 1. However, it would 
 % be worrisome if changing one parameter's value were equivalent to changing another 
 % in the same direction (correlation +1) or in the opposite direction (correlation 
-% -1). In these cases the two parameters cannot be identified independently and 
 % one of them needs to be fixed. The other parameter can then be estimated conditional 
 % on the value of the one that has been fixed.
 
@@ -142,7 +137,6 @@ tapas_fit_plotCorr(est)
 % In this case, there is nothing to worry about. Unless their correlation is 
 % very close to +1 or -1, two parameters are identifiable, meaning that they describe 
 % distinct aspects of the data.
-% 
 % The posterior parameter correlation matrix is stored in est.optim.Corr,
 
 disp(est.optim.Corr)
@@ -239,7 +233,6 @@ est1a = tapas_fitModel(sim.y,...
                        'tapas_quasinewton_optim_config');
 %% 
 % The single estimated perceptual parameter is the constant learning rate $\alpha$.
-% 
 % Just as for _hgf_binary_, we can plot posterior correlations and inferred 
 % trajectories for _rw_binary_.
 
@@ -364,15 +357,12 @@ tapas_fit_plotCorr(eest2)
 tapas_fit_plotResidualDiagnostics(est2)
 %% 
 % Everything looks fine here - no obvious patterns to be seen.
-% 
 % An important point to note is that these are the residuals of the *response 
 % model*, not the perceptual model. Ultimately, we want to be able to predict 
 % responses, not just filter inputs, and the residuals of the response model capture 
 % the performance of the combination of perceptual and response models.
-% 
 % Looking at the same diagnostics for binary responses is less straightforward. 
 % The HGF Toolbox uses *Pearson residuals* in this case, defined as
-% 
 % $$r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)} \left(1-\hat{\mu}_1^{(k)}\right) 
 % }}$$
 
@@ -390,7 +380,6 @@ tapas_fit_plotResidualDiagnostics(est)
 % to compare groups of subjects. This can be achieved by using the function _tapas_bayesian_parameter_average()_ 
 % which takes into account the covariance structure between the parameters and 
 % weights individual estimates according to their precision.
-% 
 % We begin by simulating responses from another fictive agent and estimating 
 % the parameters behind the simulated responses:
 

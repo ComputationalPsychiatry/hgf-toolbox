@@ -2,14 +2,6 @@ function tapas_hgf_jget_plotTraj(r)
 % Plots the estimated trajectories for the HGF perceptual model for
 % the JGET project
 % Usage example:  est = tapas_fitModel(responses, inputs); tapas_hgf_plotTraj(est);
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Optional plotting of standard deviations (true or false)
 plotsd = true;
@@ -101,9 +93,7 @@ end
 
 
 % Input level
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Left subplot (x)                       %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 subplot(l+1,2,2*l-1);
 
 if plotsd == true
@@ -133,9 +123,7 @@ title(['Input u (green) and posterior expectation of x_1 (red) for \kappa_x=', .
 ylabel('u, \mu x_1');
 hold off;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Right subplot (alpha)                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 subplot(l+1,2,2*l);
 
 if plotsd == true
@@ -168,9 +156,7 @@ title(['Belief on noise (red) for \kappa_\alpha=', ...
 ylabel('\mu \alpha_1');
 hold off;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Decision model                         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 subplot(l+1,2,2*l+1);
 
 if plotsd == true
@@ -195,9 +181,7 @@ ylabel('y, \^{\mu} x_1');
 xlabel({'Trial number', ' '}); % A hack to get the relative subplot sizes right
 hold off;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Learning rate                         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if genpar
 subplot(l+1,2,2*l+2);
 [AX, H1, H2 ] = plotyy(ts(2:end), mean, ts(2:end), r.traj.lrx(:,1));

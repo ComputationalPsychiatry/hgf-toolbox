@@ -1,20 +1,7 @@
 function c = tapas_hmm_config
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Contains the configuration for the hidden Markov model (HMM)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % The structure returned by fitModel() contains the estimated transition matrix A and the
 % estimated prior probabilities ppi of the states
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Config structure
 c = struct;
@@ -31,7 +18,6 @@ c.n_outcomes = 2;
 % Outcome probabilities, given states
 % Columns: states; rows: outcomes
 % Columns have to add to 1
-%
 % In this default example:
 % 1st column: "black" urn, 2nd column: "white" urn;
 % 1st row: black bead, 2nd row: white bead

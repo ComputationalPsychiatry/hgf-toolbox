@@ -1,18 +1,9 @@
 function [logp, yhat, res] = tapas_rs_precision_whatworld(r, infStates, ptrans)
 % Calculates the log-probability of response speed y (in units of ms^-1) according to the precision
 % model introduced in:
-%
 % Vossel, S.*, Mathys, C.*, Daunizeau, J., Bauer, M., Driver, J., Friston, K. J., and Stephan, K. E.
 % (2013). Spatial Attention, Precision, and Bayesian Inference: A Study of Saccadic Response Speed.
 % Cerebral Cortex.
-%
-% --------------------------------------------------------------------------------------------------
-% Copyright (C) 2012-2013 Christoph Mathys, TNU, UZH & ETHZ
-%
-% This file is part of the HGF toolbox, which is released under the terms of the GNU General Public
-% Licence (GPL), version 3. You can redistribute it and/or modify it under the terms of the GPL
-% (either version 3 or, at your option, any later version). For further details, see the file
-% COPYING or <http://www.gnu.org/licenses/>.
 
 % Transform zetas to their native space
 ze1 = exp(ptrans(1));
