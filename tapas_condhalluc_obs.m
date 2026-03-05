@@ -38,4 +38,3 @@ logp(reg) = -log(1+exp(-be.*(2.*x-1).*(2.*y-1)));
 yhat(reg) = x;
 res(reg) = (y-x)./sqrt(x.*(1-x));
 
-return;

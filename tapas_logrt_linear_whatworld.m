@@ -74,4 +74,3 @@ logp(reg) = -1/2.*log(8*atan(1).*ze) -(y-logrt).^2./(2.*ze);
 yhat(reg) = logrt;
 res(reg) = y-logrt;
 
-return;

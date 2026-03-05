@@ -8,4 +8,3 @@ pstruct.ze = pvec(1);
 pvec(2)    = ptrans(2);              % la
 pstruct.la = pvec(2);
 
-return;

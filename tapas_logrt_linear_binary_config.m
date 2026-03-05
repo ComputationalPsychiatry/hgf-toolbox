@@ -63,4 +63,3 @@ c.obs_fun = @tapas_logrt_linear_binary;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_logrt_linear_binary_transp;
 
-return;

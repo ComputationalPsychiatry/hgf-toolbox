@@ -10,4 +10,3 @@ pstruct.la_wd = pvec(2);
 pvec(3)       = ptrans(3);         % la_ld
 pstruct.la_ld = pvec(3);
 
-return;

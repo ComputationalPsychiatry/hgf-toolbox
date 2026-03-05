@@ -52,4 +52,3 @@ logp(reg) = log(probc);
 yhat(reg) = probc;
 res(reg) = -log(probc);
 
-return;

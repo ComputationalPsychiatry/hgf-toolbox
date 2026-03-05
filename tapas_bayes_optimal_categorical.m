@@ -27,4 +27,3 @@ logp(reg) = log(p);
 yhat(reg) = p;
 res(reg) = -log(p);
 
-return;

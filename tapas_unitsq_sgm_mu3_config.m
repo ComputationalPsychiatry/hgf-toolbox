@@ -37,4 +37,3 @@ c.obs_fun = @tapas_unitsq_sgm_mu3;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_unitsq_sgm_mu3_transp;
 
-return;

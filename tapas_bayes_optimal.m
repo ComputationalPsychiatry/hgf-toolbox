@@ -30,4 +30,3 @@ logp(reg) = -1/2.*log(8*atan(1).*sa1hat) -(u-mu1hat).^2./(2.*sa1hat);
 yhat(reg) = mu1hat;
 res(reg) = u-mu1hat;
 
-return;

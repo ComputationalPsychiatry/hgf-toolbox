@@ -14,4 +14,3 @@ pstruct.th    = pvec(2*nw+5);
 pstruct.m     = pvec(2*nw+6);
 pstruct.phi   = pvec(2*nw+7);
 
-return;

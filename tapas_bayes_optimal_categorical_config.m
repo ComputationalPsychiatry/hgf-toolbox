@@ -23,4 +23,3 @@ c.obs_fun = @tapas_bayes_optimal_categorical;
 % This is the handle to a dummy function since there are no parameters to transform
 c.transp_obs_fun = @tapas_bayes_optimal_categorical_transp;
 
-return;

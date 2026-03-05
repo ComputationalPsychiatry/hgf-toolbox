@@ -11,4 +11,3 @@ pstruct.ppired = pvec(1:d-1);
 pvec(d:d^2-1)  = tapas_sgm(ptrans(d:d^2-1),1); % Ared
 pstruct.Ared   = pvec(d:d^2-1);
 
-return;

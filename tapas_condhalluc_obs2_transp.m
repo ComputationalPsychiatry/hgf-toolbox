@@ -9,4 +9,3 @@ pstruct.be = pvec(1);
 pvec(2)    = exp(ptrans(2));         % nu
 pstruct.nu = pvec(2);
 
-return;

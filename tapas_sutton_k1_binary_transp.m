@@ -12,4 +12,3 @@ pstruct.vhat_1 = pvec(3);
 pvec(4)        = exp(ptrans(4));        % h_1
 pstruct.h_1    = pvec(4);
 
-return;

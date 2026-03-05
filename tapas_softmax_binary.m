@@ -55,4 +55,3 @@ yh = y.*probc +(1-y).*(1-probc);
 yhat(reg) = yh;
 res(reg) = (y -yh)./sqrt(yh.*(1 -yh));
 
-return;

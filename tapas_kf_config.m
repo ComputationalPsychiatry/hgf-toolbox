@@ -93,4 +93,3 @@ c.prc_fun = @tapas_kf;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_kf_transp;
 
-return;

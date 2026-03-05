@@ -12,4 +12,3 @@ pstruct.ka    = pvec(2*no+3);
 pstruct.om    = pvec(2*no+4);
 pstruct.th    = pvec(2*no+5);
 
-return;

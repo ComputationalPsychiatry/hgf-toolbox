@@ -9,4 +9,3 @@ pstruct.be3 = pvec(4);
 pstruct.be4 = pvec(5);
 pstruct.ze  = pvec(6);
 
-return;

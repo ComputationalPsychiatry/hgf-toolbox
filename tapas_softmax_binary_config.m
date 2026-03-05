@@ -50,4 +50,3 @@ c.obs_fun = @tapas_softmax_binary;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_softmax_binary_transp;
 
-return;

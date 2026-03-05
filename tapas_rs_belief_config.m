@@ -53,4 +53,3 @@ c.obs_fun = @tapas_rs_belief;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_rs_transp;
 
-return;

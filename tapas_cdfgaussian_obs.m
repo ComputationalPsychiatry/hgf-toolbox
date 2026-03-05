@@ -32,4 +32,3 @@ yh = 1 -x2lt0;
 yhat(reg) = yh;
 res(reg) = (y -yh)./sqrt(yh.*(1 -yh));
 
-return;

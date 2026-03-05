@@ -32,4 +32,3 @@ c.obs_fun = @tapas_gaussian_obs;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_gaussian_obs_transp;
 
-return;

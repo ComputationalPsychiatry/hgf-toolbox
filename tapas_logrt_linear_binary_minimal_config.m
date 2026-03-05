@@ -50,4 +50,3 @@ c.obs_fun = @tapas_logrt_linear_binary_minimal;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_logrt_linear_binary_minimal_transp;
 
-return;

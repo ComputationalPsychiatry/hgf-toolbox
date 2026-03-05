@@ -4,4 +4,3 @@ pstruct = struct;
 
 pstruct.nupr = pvec(1);
 
-return;

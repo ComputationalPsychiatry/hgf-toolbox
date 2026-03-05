@@ -27,4 +27,3 @@ pstruct.omx       = pvec(6*l+1:7*l);
 pvec(7*l+1:8*l)   = ptrans(7*l+1:8*l);                            % oma
 pstruct.oma       = pvec(7*l+1:8*l);
 
-return;

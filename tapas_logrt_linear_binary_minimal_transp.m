@@ -12,4 +12,3 @@ pstruct.be2 = pvec(3);
 pvec(4)     = exp(ptrans(4));    % ze
 pstruct.ze  = pvec(4);
 
-return;

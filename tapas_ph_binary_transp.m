@@ -10,4 +10,3 @@ pstruct.al_0  = pvec(2);
 pvec(3)       = exp(ptrans(3));         % S
 pstruct.S     = pvec(3);
 
-return;

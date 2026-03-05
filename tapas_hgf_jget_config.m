@@ -156,4 +156,3 @@ c.prc_fun = @tapas_hgf_jget;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_hgf_jget_transp;
 
-return;

@@ -47,4 +47,3 @@ c.obs_fun = @tapas_rs_precision_whatworld;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_rs_whatworld_transp;
 
-return;

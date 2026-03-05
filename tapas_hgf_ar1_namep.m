@@ -17,4 +17,3 @@ pstruct.ka        = pvec(4*l+1:5*l-1);
 pstruct.om        = pvec(5*l:6*l-1);
 pstruct.al        = pvec(6*l);
 
-return;

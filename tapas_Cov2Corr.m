@@ -15,4 +15,3 @@ sdev = sqrt(diag(Cov));
 Norm = sdev * sdev';
 Corr = Cov./Norm;
 
-return;

@@ -19,4 +19,3 @@ pstruct.om        = pvec(4*l:5*l-1);
 pvec(5*l)         = exp(ptrans(5*l));                      % pi_u
 pstruct.pi_u      = pvec(5*l);
 
-return;

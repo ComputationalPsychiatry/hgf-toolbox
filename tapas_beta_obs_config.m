@@ -40,4 +40,3 @@ c.obs_fun = @tapas_beta_obs;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_beta_obs_transp;
 
-return;

@@ -4,4 +4,3 @@ q = exp(beta.*x);
 Z = sum(q);
 y = q./Z;
 
-return;

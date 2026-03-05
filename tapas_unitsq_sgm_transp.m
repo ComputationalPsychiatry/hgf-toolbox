@@ -6,4 +6,3 @@ pstruct = struct;
 pvec(1)    = exp(ptrans(1));         % ze
 pstruct.ze = pvec(1);
 
-return;

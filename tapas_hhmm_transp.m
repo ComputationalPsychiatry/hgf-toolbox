@@ -42,4 +42,3 @@ end
 
 pstruct.N = N;
 
-return;

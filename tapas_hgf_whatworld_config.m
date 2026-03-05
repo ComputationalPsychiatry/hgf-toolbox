@@ -201,4 +201,3 @@ c.prc_fun = @tapas_hgf_whatworld;
 % from the space they are estimated in
 c.transp_prc_fun = @tapas_hgf_whatworld_transp;
 
-return;

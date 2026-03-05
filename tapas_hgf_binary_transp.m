@@ -17,4 +17,3 @@ pstruct.ka        = pvec(3*l+1:4*l-1);
 pvec(4*l:5*l-1)   = ptrans(4*l:5*l-1);                     % om
 pstruct.om        = pvec(4*l:5*l-1);
 
-return;

@@ -53,4 +53,3 @@ c.obs_fun = @tapas_rs_precision;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_rs_transp;
 
-return;

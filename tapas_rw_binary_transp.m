@@ -8,4 +8,3 @@ pstruct.v_0   = pvec(1);
 pvec(2)       = tapas_sgm(ptrans(2),1); % alpha
 pstruct.al    = pvec(2);
 
-return;

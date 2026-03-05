@@ -23,4 +23,3 @@ logp(reg) = u.*log(x) + (1-u).*log(1-x);
 yhat(reg) = x;
 res(reg) = (u-x)./sqrt(x.*(1-x));
 
-return;

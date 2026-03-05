@@ -33,4 +33,3 @@ c.obs_fun = @tapas_softmax;
 % from the space they are estimated in
 c.transp_obs_fun = @tapas_softmax_transp;
 
-return;
