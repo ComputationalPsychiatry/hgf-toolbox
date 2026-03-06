@@ -1,4 +1,4 @@
-function c = tapas_hmm_config
+function c = hmm_config
 % Contains the configuration for the hidden Markov model (HMM)
 % The structure returned by fitModel() contains the estimated transition matrix A and the
 % estimated prior probabilities ppi of the states
@@ -7,7 +7,7 @@ function c = tapas_hmm_config
 c = struct;
 
 % Model name
-c.model = 'hmm';
+c.model = 'tapas_hmm';
 
 % Number of hidden states
 c.n_states = 2;
@@ -27,7 +27,7 @@ c.B = [0.15 0.85; 0.85 0.15];
 % ppimuredmu must not add to more than 1.
 % The last entry in ppi is determined by ppired because ppi has to sum to 1.
 ppiredmu = 0.5;
-c.logitppiredmu = logit([ppiredmu], 1);
+c.logitppiredmu = tapas_logit([ppiredmu], 1);
 c.logitppiredsa = [1];
 
 % Reduced transition matrix Ared (all columns but last).
@@ -36,7 +36,7 @@ c.logitppiredsa = [1];
 Aredmu = [0.9; 0.1];
 Aredsa = [0.1; 0.1];
 
-c.logitAredmu = logit(Aredmu(:)', 1);
+c.logitAredmu = tapas_logit(Aredmu(:)', 1);
 c.logitAredsa = Aredsa(:)';
 
 % Gather prior settings in vectors

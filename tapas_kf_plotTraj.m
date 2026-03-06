@@ -1,6 +1,6 @@
-function tapas_kf_plotTraj(r)
+function kf_plotTraj(r)
 % Plots the estimated or generated trajectories for the Kalman filter.
-% Usage example:  est = tapas_fitModel(responses, inputs); tapas_kf_plotTraj(est);
+% Usage example:  est = fitModel(responses, inputs); kf_plotTraj(est);
 
 % Set up display
 scrsz = get(0,'screenSize');
