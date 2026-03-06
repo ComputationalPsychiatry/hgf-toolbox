@@ -1,4 +1,4 @@
-function c = tapas_hhmm_config
+function c = hhmm_config
 % Contains the configuration for the hierarchical hidden Markov model (HHMM)
 % This implementation follows the exposition in Fine, Singer, & Tishby (1998). The hierarchical
 % hidden Markov model: Analysis and Applications. Machine Learning, 32, 41–62.
@@ -26,7 +26,7 @@ function c = tapas_hhmm_config
 c = struct;
 
 % Model name
-c.model = 'hhmm';
+c.model = 'tapas_hhmm';
 
 % Number of possible outcomes
 c.n_outcomes = 2;
@@ -60,25 +60,25 @@ c.N{1}.B = [];
 % The low volatility regime
 c.N{2}.parent = 1;
 c.N{2}.children = [4, 5];
-c.N{2}.V.logitmu = logit(0.5,1);
+c.N{2}.V.logitmu = tapas_logit(0.5,1);
 c.N{2}.V.logitsa = 0;
-c.N{2}.A.logitmu = [logit(0.9,1), logit(0.05,1); logit(0.05,1), logit(0.9,1)];
+c.N{2}.A.logitmu = [tapas_logit(0.9,1), tapas_logit(0.05,1); tapas_logit(0.05,1), tapas_logit(0.9,1)];
 c.N{2}.A.logitsa = [           0,           0.1;           0.1,            0];
 c.N{2}.B = [];
 
 % The high volatility regime
 c.N{3}.parent = 1;
 c.N{3}.children = [6, 7];
-c.N{3}.V.logitmu = logit(0.5,1);
+c.N{3}.V.logitmu = tapas_logit(0.5,1);
 c.N{3}.V.logitsa = 0;
-c.N{3}.A.logitmu = [logit(0.6,1), logit(0.35,1); logit(0.35,1), logit(0.6,1)];
+c.N{3}.A.logitmu = [tapas_logit(0.6,1), tapas_logit(0.35,1); tapas_logit(0.35,1), tapas_logit(0.6,1)];
 c.N{3}.A.logitsa = [           0,           0.1;           0.1,            0];
 c.N{3}.B = [];
 
 % Black urn (low volatility)
 c.N{4}.parent = 2;
 c.N{4}.children = [];
-c.N{4}.V.logitmu = logit(0.5,1);
+c.N{4}.V.logitmu = tapas_logit(0.5,1);
 c.N{4}.V.logitsa = 0;
 c.N{4}.A = [];
 c.N{4}.B = [0.15, 0.85];
@@ -86,7 +86,7 @@ c.N{4}.B = [0.15, 0.85];
 % White urn (low volatility)
 c.N{5}.parent = 2;
 c.N{5}.children = [];
-c.N{5}.V.logitmu = logit(0.5,1);
+c.N{5}.V.logitmu = tapas_logit(0.5,1);
 c.N{5}.V.logitsa = 0;
 c.N{5}.A = [];
 c.N{5}.B = [0.85, 0.15];
@@ -94,7 +94,7 @@ c.N{5}.B = [0.85, 0.15];
 % Black urn (high volatility)
 c.N{6}.parent = 3;
 c.N{6}.children = [];
-c.N{6}.V.logitmu = logit(0.5,1);
+c.N{6}.V.logitmu = tapas_logit(0.5,1);
 c.N{6}.V.logitsa = 0;
 c.N{6}.A = [];
 c.N{6}.B = [0.15, 0.85];
@@ -102,7 +102,7 @@ c.N{6}.B = [0.15, 0.85];
 % White urn (high volatility)
 c.N{7}.parent = 3;
 c.N{7}.children = [];
-c.N{7}.V.logitmu = logit(0.5,1);
+c.N{7}.V.logitmu = tapas_logit(0.5,1);
 c.N{7}.V.logitsa = 0;
 c.N{7}.A = [];
 c.N{7}.B = [0.85, 0.15];

@@ -1,4 +1,4 @@
-function pstruct = tapas_kf_namep(pvec)
+function pstruct = kf_namep(pvec)
 
 
 pstruct = struct;

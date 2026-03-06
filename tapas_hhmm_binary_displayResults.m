@@ -1,4 +1,4 @@
-function tapas_hhmm_binary_displayResults(r)
+function hhmm_binary_displayResults(r)
 % Displays results estimated by fitModel for the hmm perceptual model in the binary case
 % Usage:  est = fitModel(responses, inputs); hmm_binary_displayResults(est);
 

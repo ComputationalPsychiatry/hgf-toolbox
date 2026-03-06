@@ -124,15 +124,15 @@ hgf_demo.pdf.
   the beta_obs model
 
 ### v4.12
-- Added tapas_autocorr.m
+- Added autocorr.m
 
 ### v4.11
 - Predictions and residuals returned by all observations models
-- Added tapas_fit_plotResidualDiagnostics()
+- Added fit_plotResidualDiagnostics()
 
 ### v4.10
 - Added hgf_categorical_norm
-- Added Boltzmann distribution (i.e., softmax normalization) as tapas_boltzmann()
+- Added Boltzmann distribution (i.e., softmax normalization) as boltzmann()
 
 ### v4.9
 - Set implied learning rate at first level to 0 if update is zero
@@ -153,11 +153,11 @@ hgf_demo.pdf.
 
 ### v4.5
 - Improved comments in softmax_binary_sim
-- Improved comments in tapas_beta_obs.m
-- Added tapas_beta_obs_{sim,namep}.m
+- Improved comments in beta_obs.m
+- Added beta_obs_{sim,namep}.m
 
 ### v4.4
-- Added tapas_hgf_ar1_binary_namep.m
+- Added hgf_ar1_binary_namep.m
 - Improved rw_binary
 
 ### v4.3
@@ -220,7 +220,7 @@ hgf_demo.pdf.
 - Added error IDs for all errors
 
 ### v3.0
-- Improved error handling in tapas_fitModel()
+- Improved error handling in fitModel()
 - Prefixed all function names with “tapas_”
 - Added rs_precision
 - Added rs_belief

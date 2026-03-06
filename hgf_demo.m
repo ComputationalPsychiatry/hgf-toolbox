@@ -41,11 +41,11 @@ axis([1, 320, -0.1, 1.1])
 % * The fifth argument is the optimization algorithm to be used, _quasinewton_optim_ 
 % here, which is a variant of the Broyden-Fletcher-Goldfarb-Shanno (BFGS) algorithm.
 
-bopars = tapas_fitModel([],...
+bopars = fitModel([],...
                          u,...
-                         'tapas_hgf_binary_config',...
-                         'tapas_bayes_optimal_binary_config',...
-                         'tapas_quasinewton_optim_config');
+                         'hgf_binary_config',...
+                         'bayes_optimal_binary_config',...
+                         'quasinewton_optim_config');
 %% 
 % The only parameter whose Bayes optimal values we've estimated is $\omega$. 
 % This is the tonic volatility in the HGF. At the first level, $\omega_1$ is undefined 
@@ -54,9 +54,9 @@ bopars = tapas_fitModel([],...
 % and at the third level one of, for example, $\omega_3=-6.01$ (this will vary 
 % on different runs of this script).
 % The other parameters are fixed to a particular value because their prior variance 
-% has been set to zero in the configuration file _tapas_hgf_binary_config.m._ 
+% has been set to zero in the configuration file _hgf_binary_config.m._ 
 % This means that their posterior means, displayed here, are the same as the prior 
-% means set in _tapas_hgf_binary_config.m_.
+% means set in _hgf_binary_config.m_.
 % Their meanings are
 %% 
 % * $\mu_0$ and $\sigma_0$ are the initial values of the perceptual state
@@ -74,22 +74,22 @@ bopars = tapas_fitModel([],...
 % with parameter $\zeta=5$. The last argument is an optional seed for the random 
 % number generator.
 
-sim = tapas_simModel(u,...
-                     'tapas_hgf_binary',...
+sim = simModel(u,...
+                     'hgf_binary',...
                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN -2.5 -6],...
-                     'tapas_unitsq_sgm',...
+                     'unitsq_sgm',...
                      5,...
                      123456789);
 %% 
 % The general meaning of the arguments supplied to simModel is explained in 
-% the manual and in the file _tapas_simModel.m_. The specific meaning of each 
+% the manual and in the file _simModel.m_. The specific meaning of each 
 % argument in this example is explained in the configuration files of the perceptual 
-% model (_tapas_hgf_binary_config.m_) and of the response model (_tapas_unitsq_sgm_config.m_).
+% model (_hgf_binary_config.m_) and of the response model (_unitsq_sgm_config.m_).
 %% Plot simulated responses
 % We can plot our simulated responses $y$ using the plotting function for _hgf_binary_ 
 % models.
 
-tapas_hgf_binary_plotTraj(sim)
+hgf_binary_plotTraj(sim)
 %% Recover parameter values from simulated responses
 % We can now try to recover the parameters we put into the simulation ($\omega_2=-2.5$ 
 % and $\omega_3=-6$) using fitModel. In order to do this, we need to define prior 
@@ -97,23 +97,23 @@ tapas_hgf_binary_plotTraj(sim)
 % These priors are defined in a configuration file for each model, which returns 
 % a configuration structure when we run it.
 
-hgf_binary_config = tapas_hgf_binary_config()
-unitsq_sgm_config = tapas_unitsq_sgm_config()
+hgf_binary_config = hgf_binary_config()
+unitsq_sgm_config = unitsq_sgm_config()
 %% 
 % In addition to the configurations for the perceptual and observation models, 
 % we can also explicitly configure the optimization algorithm.
 
-optim_config = tapas_quasinewton_optim_config()
+optim_config = quasinewton_optim_config()
 %% 
 % The details of these configurations are documented in the configuration files 
 % themselves. Now, let's press on with estimating the parameter values for our 
 % simulated data.
 
-est = tapas_fitModel(sim.y, sim.u, hgf_binary_config, unitsq_sgm_config, optim_config);
+est = fitModel(sim.y, sim.u, hgf_binary_config, unitsq_sgm_config, optim_config);
 %% 
 % We find, for example, $\omega_2=-2.37$ and $\omega_3=-6.32$ (this will vary 
 % on different runs of this script if you don't set the seed for the random number 
-% generator, ie the last argument to _tapas_simModel_). How good is that? It doesn't 
+% generator, ie the last argument to _simModel_). How good is that? It doesn't 
 % look bad, but the answer is that we cannot say anything from doing this just 
 % once. We have to repeat the simulation/estimation procedure many times (without 
 % setting the random number generator seed) and then look at the distribution 
@@ -132,7 +132,7 @@ est = tapas_fitModel(sim.y, sim.u, hgf_binary_config, unitsq_sgm_config, optim_c
 % one of them needs to be fixed. The other parameter can then be estimated conditional 
 % on the value of the one that has been fixed.
 
-tapas_fit_plotCorr(est)
+fit_plotCorr(est)
 %% 
 % In this case, there is nothing to worry about. Unless their correlation is 
 % very close to +1 or -1, two parameters are identifiable, meaning that they describe 
@@ -160,7 +160,7 @@ disp(est.p_obs)
 % As with the simulated trajectories, we can plot the inferred belief trajectories 
 % implied by the estimated parameters.
 
-tapas_hgf_binary_plotTraj(est)
+hgf_binary_plotTraj(est)
 %% 
 % These trajectories can be found in est.traj:
 
@@ -178,15 +178,15 @@ unitsq_sgm_config
 unitsq_sgm_config.logzesa = 0.5
 %% 
 % We can then propagate this change throughout the configuration structure using 
-% the function tapas_align_priors().
+% the function align_priors().
 
-tapas_align_priors(unitsq_sgm_config)
+align_priors(unitsq_sgm_config)
 %% 
 % Note the change in the field priorsas. However, this is not strictly necessary 
-% because tapas_fitModel and similar functions automatically take care of this.
+% because fitModel and similar functions automatically take care of this.
 %% Sampling from the priors
 % An important sanity check for any model is that its prior predictive distribution 
-% should make sense. We can check this using the function tapas_sampleModel, which 
+% should make sense. We can check this using the function sampleModel, which 
 % samples parameter values randomly from the priors and simulates data with these 
 % values. The distribution of simulated behaviours and belief trajectories should 
 % exhaust, but remain within, the range of plausible behaviours and belief trajectories. 
@@ -194,10 +194,10 @@ tapas_align_priors(unitsq_sgm_config)
 % toolbox!) tend to be too loose and should be tightened in order for the prior 
 % predictive distribution to remain within the bounds of what is plausible.
 
-sample1 = tapas_sampleModel(u, hgf_binary_config, unitsq_sgm_config, 123);
-tapas_hgf_binary_plotTraj(sample1)
-sample2 = tapas_sampleModel(u, hgf_binary_config, unitsq_sgm_config, 456);
-tapas_hgf_binary_plotTraj(sample2)
+sample1 = sampleModel(u, hgf_binary_config, unitsq_sgm_config, 123);
+hgf_binary_plotTraj(sample1)
+sample2 = sampleModel(u, hgf_binary_config, unitsq_sgm_config, 456);
+hgf_binary_plotTraj(sample2)
 %% Enhanced HGF
 % The enhanced HGF (eHGF) is based on a different derivation of the update equations. 
 % It has the advantage that it allows for a much greater range of parameter values 
@@ -205,39 +205,39 @@ tapas_hgf_binary_plotTraj(sample2)
 % values below leads to an error in the classic HGF, while the eHGF can handle 
 % this easily.
 
-esim = tapas_simModel(u,...
-                     'tapas_ehgf_binary',...
+esim = simModel(u,...
+                     'ehgf_binary',...
                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -4 3],...
-                     'tapas_unitsq_sgm',...
+                     'unitsq_sgm',...
                      5,...
                      123456789);              
-tapas_ehgf_binary_plotTraj(esim)
+ehgf_binary_plotTraj(esim)
 %%
-ehgf_binary_config = tapas_ehgf_binary_config();
-eest = tapas_fitModel(esim.y, esim.u, ehgf_binary_config, unitsq_sgm_config, optim_config);
-tapas_ehgf_binary_plotTraj(eest)
-tapas_fit_plotCorr(eest)
+ehgf_binary_config = ehgf_binary_config();
+eest = fitModel(esim.y, esim.u, ehgf_binary_config, unitsq_sgm_config, optim_config);
+ehgf_binary_plotTraj(eest)
+fit_plotCorr(eest)
 disp(eest.optim.Corr)
 %% Changing the perceptual model
 % Next, let's try to fit the same data using a different perceptual model while 
 % keeping the same response model. We will take the Rescorla-Wagner model _rw_binary_. 
 % Note that instead of first creating configuration structures by running the 
-% configuration files and calling tapas_fitModel with the configuration structures 
+% configuration files and calling fitModel with the configuration structures 
 % as arguments, we can also just use character strings with the names of the configuration 
-% functions as arguments to tapas_fitModel.
+% functions as arguments to fitModel.
 
-est1a = tapas_fitModel(sim.y,...
+est1a = fitModel(sim.y,...
                        sim.u,...
-                       'tapas_rw_binary_config',...
-                       'tapas_unitsq_sgm_config',...
-                       'tapas_quasinewton_optim_config');
+                       'rw_binary_config',...
+                       'unitsq_sgm_config',...
+                       'quasinewton_optim_config');
 %% 
 % The single estimated perceptual parameter is the constant learning rate $\alpha$.
 % Just as for _hgf_binary_, we can plot posterior correlations and inferred 
 % trajectories for _rw_binary_.
 
-tapas_fit_plotCorr(est1a)
-tapas_rw_binary_plotTraj(est1a)
+fit_plotCorr(est1a)
+rw_binary_plotTraj(est1a)
 %% Input on a continuous scale
 % Up to now, we've only used binary input - 0 or 1. However, many of the most 
 % interesting time series are on a continuous scale. As an example, we'll use 
@@ -249,26 +249,26 @@ usdchf = load('example_usdchf.txt');
 % As before, we'll first estimate the Bayes optimal parameter values. This time, 
 % we'll take a 2-level HGF for continuous-scaled inputs.
 
-bopars2 = tapas_fitModel([],...
+bopars2 = fitModel([],...
                          usdchf,...
-                         'tapas_hgf_config',...
-                         'tapas_bayes_optimal_config',...
-                         'tapas_quasinewton_optim_config');
+                         'hgf_config',...
+                         'bayes_optimal_config',...
+                         'quasinewton_optim_config');
 %% 
 % And again, let's check the posterior correlation and the trajectories:
 
-tapas_fit_plotCorr(bopars2)
-tapas_hgf_plotTraj(bopars2)
+fit_plotCorr(bopars2)
+hgf_plotTraj(bopars2)
 %% 
 % Now, let's simulate an agent and plot the resulting trajectories:
 
-sim2 = tapas_simModel(usdchf,...
-                      'tapas_hgf',...
+sim2 = simModel(usdchf,...
+                      'hgf',...
                       [1.04 1 0.0001 0.1 0 0 1 -13  -2 1e4],...
-                      'tapas_gaussian_obs',...
+                      'gaussian_obs',...
                       0.00002,...
                       123456789);
-tapas_hgf_plotTraj(sim2)
+hgf_plotTraj(sim2)
 %% 
 % Looking at the volatility (ie, the second) level, we see that there are two 
 % salient events in our time series where volatility shoots up. The first is in 
@@ -283,13 +283,13 @@ tapas_hgf_plotTraj(sim2)
 %% Adding levels
 % Let's see what happens if we add another level:
 
-sim2a = tapas_simModel(usdchf,...
-                       'tapas_hgf',...
+sim2a = simModel(usdchf,...
+                       'hgf',...
                        [1.04 1 1 0.0001 0.1 0.1 0 0 0 1 1 -13  -2 -2 1e4],...
-                       'tapas_gaussian_obs',...
+                       'gaussian_obs',...
                        0.00005,...
                        123456789);
-tapas_hgf_plotTraj(sim2a)
+hgf_plotTraj(sim2a)
 %% 
 % Owing to the presence of the third level, the second level is a lot smoother 
 % now. At the third level, nothing much happens. This is an indication that adding 
@@ -319,42 +319,42 @@ title('Precision weights')
 % Now, let's try to recover the parameters we put into the simulation by fitting 
 % the HGF to our simulated responses:
 
-est2 = tapas_fitModel(sim2.y,...
+est2 = fitModel(sim2.y,...
                       usdchf,...
-                      'tapas_hgf_config',...
-                      'tapas_gaussian_obs_config',...
-                      'tapas_quasinewton_optim_config');
+                      'hgf_config',...
+                      'gaussian_obs_config',...
+                      'quasinewton_optim_config');
 %% 
 % Again, we fit the posterior correlation and the estimated trajectories:
 
-tapas_fit_plotCorr(est2)
-tapas_hgf_plotTraj(est2)
+fit_plotCorr(est2)
+hgf_plotTraj(est2)
 %% Enhanced HGF
 % As above for binary inputs, we can use the enhanced HGF (eHGF) also for inputs 
 % on a continuous scale.
 
-esim2 = tapas_simModel(usdchf,...
-                      'tapas_hgf',...
+esim2 = simModel(usdchf,...
+                      'hgf',...
                       [1.04 1 0.0001 0.1 0 0 1 -13  -2 1e4],...
-                      'tapas_gaussian_obs',...
+                      'gaussian_obs',...
                       0.00002,...
                       123456789);
-tapas_ehgf_plotTraj(esim2)
+ehgf_plotTraj(esim2)
 %%
-eest2 = tapas_fitModel(esim2.y,...
+eest2 = fitModel(esim2.y,...
                        usdchf,...
-                       'tapas_hgf_config',...
-                       'tapas_gaussian_obs_config',...
-                       'tapas_quasinewton_optim_config');
-tapas_hgf_plotTraj(eest2)
-tapas_fit_plotCorr(eest2)
+                       'hgf_config',...
+                       'gaussian_obs_config',...
+                       'quasinewton_optim_config');
+hgf_plotTraj(eest2)
+fit_plotCorr(eest2)
 %% Plotting residual diagnostics
 % It's often helpful to look at the residuals (ie, the differences between predicted 
 % and actual responses) of a model. If the residual show any obvious patterns, 
 % that's an indication that your model fails to capture aspects of the data that 
 % should in princple be predictable.
 
-tapas_fit_plotResidualDiagnostics(est2)
+fit_plotResidualDiagnostics(est2)
 %% 
 % Everything looks fine here - no obvious patterns to be seen.
 % An important point to note is that these are the residuals of the *response 
@@ -366,7 +366,7 @@ tapas_fit_plotResidualDiagnostics(est2)
 % $$r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)} \left(1-\hat{\mu}_1^{(k)}\right) 
 % }}$$
 
-tapas_fit_plotResidualDiagnostics(est)
+fit_plotResidualDiagnostics(est)
 %% 
 % In the case of our binary response example, we see some patterns in the residuals, 
 % notably in their autocorrelation. This is due to the fact that there are fairly 
@@ -377,29 +377,29 @@ tapas_fit_plotResidualDiagnostics(est)
 % to go in the same direction around every 90 inputs.
 %% Bayesian parameter averaging
 % It is often useful to average parameters from several estimations, for instance 
-% to compare groups of subjects. This can be achieved by using the function _tapas_bayesian_parameter_average()_ 
+% to compare groups of subjects. This can be achieved by using the function _bayesian_parameter_average()_ 
 % which takes into account the covariance structure between the parameters and 
 % weights individual estimates according to their precision.
 % We begin by simulating responses from another fictive agent and estimating 
 % the parameters behind the simulated responses:
 
-sim2b = tapas_simModel(usdchf,...
-                       'tapas_hgf',...
+sim2b = simModel(usdchf,...
+                       'hgf',...
                        [1.04 1 0.0001 0.1 0 0 1 -14.5 -2.5 1e4],...
-                       'tapas_gaussian_obs',...
+                       'gaussian_obs',...
                        0.00002,...
                        12345);
-tapas_hgf_plotTraj(sim2b)
-est2b = tapas_fitModel(sim2b.y,...
+hgf_plotTraj(sim2b)
+est2b = fitModel(sim2b.y,...
                        usdchf,...
-                       'tapas_hgf_config',...
-                       'tapas_gaussian_obs_config',...
-                       'tapas_quasinewton_optim_config');
-tapas_fit_plotCorr(est2b)
-tapas_hgf_plotTraj(est2b)
+                       'hgf_config',...
+                       'gaussian_obs_config',...
+                       'quasinewton_optim_config');
+fit_plotCorr(est2b)
+hgf_plotTraj(est2b)
 %% 
 % Now we can take the Bayesian parameter average of our two:
 
-bpa = tapas_bayesian_parameter_average(est2, est2b);
-tapas_fit_plotCorr(bpa)
-tapas_hgf_plotTraj(bpa)
+bpa = bayesian_parameter_average(est2, est2b);
+fit_plotCorr(bpa)
+hgf_plotTraj(bpa)

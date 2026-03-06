@@ -1,4 +1,4 @@
-function c = tapas_kf_config
+function c = kf_config
 % Contains the configuration for the Kalman filter
 % The Kalman filter configuration consists of the priors of parameters and initial values. All
 % priors are Gaussian in the space where the quantity they refer to is estimated. They are specified
@@ -8,8 +8,8 @@ function c = tapas_kf_config
 % Parameters can be fixed (i.e., set to a fixed value) by setting the variance of their prior to
 % zero.
 % Fitted trajectories can be plotted by using the command
-% >> tapas_kf_plotTraj(est)
-% where est is the stucture returned by tapas_fitModel. This structure contains the estimated
+% >> kf_plotTraj(est)
+% where est is the stucture returned by fitModel. This structure contains the estimated
 % perceptual parameters in est.p_prc and the estimated trajectories of the filter's
 % representations. Their meanings are:
 %         est.p_prc.g_0        initial value of gain
@@ -20,7 +20,7 @@ function c = tapas_kf_config
 %         est.traj.g           gain
 %         est.traj.mu          hidden state mean
 % Tips:
-%   >> est = tapas_fitModel([], u, 'tapas_kf_config', 'tapas_bayes_optimal_config');
+%   >> est = fitModel([], u, 'kf_config', 'bayes_optimal_config');
 %   to determine the Bayes optimal perceptual parameters (given your current priors as defined in
 %   this file here, so choose them wide and loose to let the inputs influence the result). You can
 %   then use the optimal parameters as your new prior means for the perceptual parameters.

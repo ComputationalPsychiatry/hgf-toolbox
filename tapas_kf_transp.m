@@ -1,4 +1,4 @@
-function [pvec, pstruct] = tapas_kf_transp(r, ptrans)
+function [pvec, pstruct] = kf_transp(r, ptrans)
 
 
 pvec    = NaN(1,length(ptrans));
