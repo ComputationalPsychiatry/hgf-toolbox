@@ -5,6 +5,75 @@ Filter) toolbox: how the files are organized, how the different components
 relate to each other, and how to choose and configure models.
 
 
+## Directory structure
+
+```
+hgf-toolbox/
+├── setup.m                 Run once to add all directories to the MATLAB path
+├── README.md               Overview, quick start, release notes
+├── ARCHITECTURE.md         This file
+├── LICENSE
+│
+├── core/                   Entry points and optimization (5 files)
+│   ├── fitModel.m          Fit model parameters to data (MAP estimation)
+│   ├── simModel.m          Simulate beliefs and responses
+│   ├── sampleModel.m       Sample from the prior
+│   ├── quasinewton_optim.m Quasi-Newton optimizer
+│   └── quasinewton_optim_config.m
+│
+├── building_blocks/        Shared HGF update equations (10 files)
+│   ├── hgf_prediction.m    One-step-ahead prediction
+│   ├── hgf_volatility_update.m  Volatility-level update (HGF vs eHGF)
+│   ├── hgf_pihat.m         Predicted precision
+│   └── ...
+│
+├── perceptual/             Perceptual models and their configs (149 files)
+│   ├── hgf_binary_unified.m      Unified binary HGF implementation
+│   ├── hgf_binary.m              Wrapper (sets update_type='hgf')
+│   ├── ehgf_binary.m             Wrapper (sets update_type='ehgf')
+│   ├── hgf_binary_config_base.m  Config factory
+│   ├── hgf_binary_config.m       Config wrapper (calls base('hgf'))
+│   ├── ehgf_binary_config.m      Config wrapper (calls base('ehgf'))
+│   ├── hgf_binary_transp.m       Parameter transformation
+│   ├── hgf_binary_namep.m        Parameter naming
+│   ├── rw_binary.m               Rescorla-Wagner
+│   └── ...
+│
+├── observation/            Observation (response) models (82 files)
+│   ├── gaussian_obs.m      Gaussian noise model
+│   ├── softmax_binary.m    Binary softmax
+│   ├── unitsq_sgm.m        Unit-square sigmoid
+│   ├── *_sim.m             Simulation files
+│   └── ...
+│
+├── plotting/               Visualization functions (26 files)
+│   ├── hgf_binary_plotTraj.m
+│   ├── fit_plotCorr.m
+│   └── ...
+│
+├── utilities/              Math and helper functions (15 files)
+│   ├── tapas_sgm.m         Logistic sigmoid
+│   ├── bayesian_parameter_average.m
+│   ├── riddersgradient.m   Numerical differentiation
+│   └── ...
+│
+├── demo/                   Tutorial and example data (6 files)
+│   ├── hgf_demo.mlx        Interactive tutorial (LiveScript)
+│   ├── hgf_demo.m          Script version
+│   ├── hgf_demo_commands.m Raw commands
+│   ├── example_binary_input.txt
+│   ├── example_usdchf.txt
+│   └── example_categorical_input.mat
+│
+├── tests/                  Test suite
+└── _original_models/       Pre-refactoring backups (can be removed)
+```
+
+After running `setup`, all functions are on the MATLAB path and can be
+called by name without path prefixes — e.g., `fitModel(...)`,
+`'hgf_binary_config'`, `hgf_binary_plotTraj(est)`, etc.
+
+
 ## Entry points
 
 The toolbox has three main entry points:
@@ -262,12 +331,12 @@ parameters given the data.
 
 ## Utilities
 
-| Function | Purpose |
-|---|---|
-| `bayesian_parameter_average` | Bayesian parameter averaging across subjects |
-| `align_priors` | Ensure consistency of prior specification |
-| `fit_plotCorr` | Plot posterior parameter correlations |
-| `fit_plotResidualDiagnostics` | Residual diagnostic plots |
-| `tapas_sgm` | Logistic sigmoid function |
-| `tapas_logit` | Logit (inverse sigmoid) function |
-| `boltzmann` | Boltzmann (softmax) distribution |
+| Function | Directory | Purpose |
+|---|---|---|
+| `bayesian_parameter_average` | `utilities/` | Bayesian parameter averaging across subjects |
+| `align_priors` | `utilities/` | Ensure consistency of prior specification |
+| `fit_plotCorr` | `plotting/` | Plot posterior parameter correlations |
+| `fit_plotResidualDiagnostics` | `plotting/` | Residual diagnostic plots |
+| `tapas_sgm` | `utilities/` | Logistic sigmoid function |
+| `tapas_logit` | `utilities/` | Logit (inverse sigmoid) function |
+| `boltzmann` | `utilities/` | Boltzmann (softmax) distribution |
