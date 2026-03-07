@@ -1,5 +1,16 @@
 function y = logrt_linear_binary_sim(r, infStates, p)
 % Simulates logRTs with Gaussian noise
+%
+% INPUT:
+%   r          Result struct. Relevant fields:
+%                r.c_sim.seed - RNG seed (NaN for random)
+%                r.c_obs      - observation model config
+%   infStates  Inferred states from the perceptual model
+%              (n_trials x n_levels x 4; see ARCHITECTURE.md)
+%   p          Observation model parameters in native space
+%
+% OUTPUT:
+%   y          Simulated responses (n_trials x 1)
 
 % Get parameters
 be0  = p(1);

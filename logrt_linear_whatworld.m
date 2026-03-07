@@ -1,6 +1,20 @@
 function [logp, yhat, res] = logrt_linear_whatworld(r, infStates, ptrans)
 % Calculates the log-probability of log-reaction times y (in units of log-ms) according to the
 % linear log-RT model developed with Louise Marshall and Sven Bestmann
+%
+% INPUT:
+%   r          Result struct. Relevant fields:
+%                r.y    - responses (n_trials x 1)
+%                r.irr  - index of irregular trials
+%                r.c_obs - observation model config
+%   infStates  Inferred states from the perceptual model
+%              (n_trials x n_levels x 4; see ARCHITECTURE.md)
+%   ptrans     Observation model parameters in transformed (optimization) space
+%
+% OUTPUT:
+%   logp       Log-probabilities of observed responses (n_trials x 1)
+%   yhat       Predicted responses (n_trials x 1)
+%   res        Residuals: y - yhat (n_trials x 1)
 
 % Transform zetas to their native space
 be0  = ptrans(1);

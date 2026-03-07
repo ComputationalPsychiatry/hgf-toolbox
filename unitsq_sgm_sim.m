@@ -1,5 +1,17 @@
 function [y, prob] = unitsq_sgm_sim(r, infStates, p)
 % Simulates observations from a Bernoulli distribution
+%
+% INPUT:
+%   r          Result struct. Relevant fields:
+%                r.c_sim.seed - RNG seed (NaN for random)
+%                r.c_obs      - observation model config
+%   infStates  Inferred states from the perceptual model
+%              (n_trials x n_levels x 4; see ARCHITECTURE.md)
+%   p          Observation model parameters in native space
+%
+% OUTPUT:
+%   y          Simulated responses (n_trials x 1)
+%   prob       Response probabilities (n_trials x 1)
 
 % Predictions or posteriors?
 pop = 1; % Default: predictions

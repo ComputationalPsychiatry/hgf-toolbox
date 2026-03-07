@@ -1,9 +1,12 @@
 function [traj, infStates] = ehgf_ar1_binary(r, p, varargin)
-% Calculates the trajectories of the agent's representations under the eHGF
-% for AR(1) processes and binary outcomes.
+% Enhanced HGF for AR(1) processes with binary outcomes.
 %
 % This is a backward-compatible wrapper that calls hgf_ar1_binary_unified
-% with update_type = 'ehgf'.
+% with update_type = 'ehgf'. Uses a safe precision update. Includes drift (rho) and mean-reversion
+%   (phi, m) parameters.
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_ar1_binary_unified.m.
 %
 % This function can be called in two ways:
 % (1) ehgf_ar1_binary(r, p)

@@ -2,6 +2,20 @@ function [logp, yhat, res] = softmax_mu3_wld(r, infStates, ptrans)
 % Calculates the log-probability of responses under the softmax model
 % with phasic volatility exp(mu3) as the decision temperature and parameters
 % accounting for win- and loss-distortion of state values.
+%
+% INPUT:
+%   r          Result struct. Relevant fields:
+%                r.y    - responses (n_trials x 1)
+%                r.irr  - index of irregular trials
+%                r.c_obs - observation model config
+%   infStates  Inferred states from the perceptual model
+%              (n_trials x n_levels x 4; see ARCHITECTURE.md)
+%   ptrans     Observation model parameters in transformed (optimization) space
+%
+% OUTPUT:
+%   logp       Log-probabilities of observed responses (n_trials x 1)
+%   yhat       Predicted responses (n_trials x 1)
+%   res        Residuals: y - yhat (n_trials x 1)
 
 % Predictions or posteriors?
 pop = 1; % Default: predictions

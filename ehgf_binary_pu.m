@@ -1,9 +1,11 @@
 function [traj, infStates] = ehgf_binary_pu(r, p, varargin)
-% Calculates the trajectories of the agent's representations under the eHGF
-% for binary inputs with perceptual uncertainty.
+% Enhanced HGF for binary inputs with perceptual uncertainty.
 %
 % This is a backward-compatible wrapper that calls hgf_binary_pu_unified
-% with update_type = 'ehgf'.
+% with update_type = 'ehgf'. Uses a safe precision update that prevents negative precision values.
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_binary_pu_unified.m.
 %
 % This function can be called in two ways:
 % (1) ehgf_binary_pu(r, p)

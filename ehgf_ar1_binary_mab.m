@@ -1,9 +1,12 @@
 function [traj, infStates] = ehgf_ar1_binary_mab(r, p, varargin)
-% Calculates the trajectories of the agent's representations under the eHGF
-% for AR(1) processes with binary outcomes in a multi-armed bandit setting.
+% Enhanced HGF for AR(1) processes with binary outcomes in a multi-armed bandit.
 %
 % This is a backward-compatible wrapper that calls hgf_ar1_binary_mab_unified
-% with update_type = 'ehgf'.
+% with update_type = 'ehgf'. Uses a safe precision update. Extends AR(1) binary HGF to multi-armed
+%   bandit settings.
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_ar1_binary_mab_unified.m.
 %
 % This function can be called in two ways:
 % (1) ehgf_ar1_binary_mab(r, p)

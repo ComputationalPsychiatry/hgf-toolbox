@@ -1,6 +1,20 @@
 function [logp, yhat, res] = cdfgaussian_obs(r, infStates, ptrans)
 % Calculates the log-probability of response y under a cumulative Gaussian distribution. This
 % model has no free parameters.
+%
+% INPUT:
+%   r          Result struct. Relevant fields:
+%                r.y    - responses (n_trials x 1)
+%                r.irr  - index of irregular trials
+%                r.c_obs - observation model config
+%   infStates  Inferred states from the perceptual model
+%              (n_trials x n_levels x 4; see ARCHITECTURE.md)
+%   ptrans     Observation model parameters in transformed (optimization) space
+%
+% OUTPUT:
+%   logp       Log-probabilities of observed responses (n_trials x 1)
+%   yhat       Predicted responses (n_trials x 1)
+%   res        Residuals: y - yhat (n_trials x 1)
 
 % Initialize returned log-probabilities as NaNs so that NaN is
 % returned for all irregualar trials
