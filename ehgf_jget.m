@@ -1,9 +1,11 @@
 function [traj, infStates] = ehgf_jget(r, p, varargin)
-% Calculates the trajectories of the agent's representations under the eHGF model
-% of the jumping Gaussian estimation task (JGET).
+% Enhanced HGF for the jumping Gaussian estimation task (JGET).
 %
 % This is a backward-compatible wrapper that calls hgf_jget_unified
-% with update_type = 'ehgf'.
+% with update_type = 'ehgf'. Uses a safe precision update that prevents negative precision values.
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_jget_unified.m.
 %
 % This function can be called in two ways:
 % (1) ehgf_jget(r, p)

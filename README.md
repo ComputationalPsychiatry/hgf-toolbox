@@ -22,25 +22,55 @@ Move this folder to a location of your choice and add it to your Matlab
 path.
 
 
-## Documentation and configuration
+## Quick start
 
-Documentation can be found in the tutorial demo (see below) and
-throughout the source code.
+```matlab
+% Load example binary input
+u = load('example_binary_input.txt');
 
-**Note:** The Manual.pdf is outdated and does not reflect the current
-architecture. It references old `tapas_`-prefixed function names and
-does not document the eHGF or the unified `update_type` mechanism.
-Please refer to `hgf_demo.mlx` and the source code for current
-documentation.
+% Fit a 3-level binary HGF with unit-square sigmoid response model
+est = fitModel([], u, 'hgf_binary_config', 'bayes_optimal_binary_config', 'quasinewton_optim_config');
+
+% Plot the estimated belief trajectories
+hgf_binary_plotTraj(est)
+
+% Simulate with known parameters and an observation model
+sim = simModel(u, 'hgf_binary', [NaN 0 1 NaN 1 1 NaN 0 0 NaN 1 NaN -2.5 -6], 'unitsq_sgm', 5);
+
+% Use the enhanced HGF (eHGF) instead — just change the config
+est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewton_optim_config');
+```
 
 
-## Tutorial demo
+## Documentation
 
-There is a Matlab LiveScript tutorial demo that can be launched by
-opening hgf_demo.mlx in Matlab. A PDF version is available in
-hgf_demo.pdf.
+- **Architecture guide**: See [ARCHITECTURE.md](ARCHITECTURE.md) for an
+  overview of file organization, naming conventions, the unified
+  HGF/eHGF architecture, parameter notation, and the trajectory
+  data structures.
+- **Tutorial demo**: Open `hgf_demo.mlx` in Matlab for an interactive
+  walkthrough. A PDF version is available in `hgf_demo.pdf`.
+- **Source code**: All functions have header comments accessible via
+  `help <function_name>` in Matlab.
 
 ## Release notes
+
+### v8.1
+- **Added `ARCHITECTURE.md`**: Comprehensive guide to file organization,
+  naming conventions, model inventory, parameter notation, the unified
+  HGF/eHGF architecture, and the `traj`/`infStates` data structures
+- **Added INPUT/OUTPUT documentation** to all 18 observation model files
+  and all 14 simulation (`*_sim.m`) files
+- **Expanded `sampleModel.m` documentation** with full INPUT/OUTPUT
+  descriptions and usage examples, matching the quality of `fitModel.m`
+- **Enriched wrapper files** (e.g., `hgf.m`, `ehgf_binary.m`) with
+  context on when to use them, which unified model they delegate to,
+  and cross-references to detailed documentation
+- **Fixed garbled comments** in `hgf_binary_pu.m`
+- **Removed outdated `Manual.pdf`** (replaced by `ARCHITECTURE.md` and
+  `hgf_demo.mlx`)
+- **Expanded README.md** with quick-start example and documentation
+  section
 
 ### v8.0
 - **Unified HGF/eHGF architecture**: All HGF and eHGF model variants

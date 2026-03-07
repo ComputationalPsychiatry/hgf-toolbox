@@ -1,9 +1,11 @@
 function [traj, infStates] = hgf_binary(r, p, varargin)
-% Calculates the trajectories of the agent's representations under the HGF
-% for binary inputs.
+% Standard Hierarchical Gaussian Filter for binary inputs.
 %
 % This is a backward-compatible wrapper that calls hgf_binary_unified
-% with update_type = 'hgf'.
+% with update_type = 'hgf'. Uses the classic precision update equations from Mathys et al. (2011).
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_binary_unified.m.
 %
 % This function can be called in two ways:
 % (1) hgf_binary(r, p)

@@ -1,9 +1,42 @@
 function r = sampleModel(inputs, varargin)
-% Samples prior values from the prior provided in the configurations of the perceptual and
-% (optionally) the response model and returns the implied belief trajectories (and simulated
-% responses, if a response model was specified).
+% Samples parameter values from the prior and computes the implied belief
+% trajectories. If an observation model is specified, also simulates
+% responses from the sampled observation model parameters.
+%
+% This is useful for prior predictive checks: understanding what behavior
+% the prior implies before fitting any data.
+%
 % USAGE:
-%     est = sampleModel(inputs, perceptual_config, observational_config, seed)
+%     sam = sampleModel(inputs, perceptual_config)
+%     sam = sampleModel(inputs, perceptual_config, observational_config)
+%     sam = sampleModel(inputs, perceptual_config, observational_config, seed)
+%
+% INPUT:
+%   inputs               Array of inputs (column vector). See fitModel for
+%                         details on coding of irregular/ignored trials.
+%   perceptual_config    Either the name of a perceptual config function
+%                         (e.g., 'ehgf_binary_config') or a config struct.
+%                         Default: ehgf_binary_config
+%   observational_config (Optional) Either the name of an observation
+%                         config function (e.g., 'unitsq_sgm_config') or a
+%                         config struct. If omitted, no responses are
+%                         simulated.
+%   seed                  (Optional) Seed for the random number generator.
+%                         Default: NaN (random seed)
+%
+% OUTPUT:
+%   sam.u        Inputs
+%   sam.y        Simulated responses (only if observation model specified)
+%   sam.c_prc    Perceptual model config (including priors)
+%   sam.c_obs    Observation model config (if specified)
+%   sam.p_prc    Sampled perceptual parameters (in native and transformed space)
+%   sam.p_obs    Sampled observation parameters (if observation model specified)
+%   sam.traj     Belief trajectories implied by sampled parameters
+%
+% EXAMPLE:
+%   u = load('example_binary_input.txt');
+%   sam = sampleModel(u, 'ehgf_binary_config', 'unitsq_sgm_config', 12345);
+%   hgf_binary_plotTraj(sam)
 
 % Store responses, inputs, and information about irregular trials in newly
 % initialized structure r

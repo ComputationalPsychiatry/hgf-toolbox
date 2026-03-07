@@ -2,7 +2,10 @@ function [traj, infStates] = ehgf(r, p, varargin)
 % Enhanced Hierarchical Gaussian Filter for continuous inputs.
 %
 % This is a backward-compatible wrapper that calls hgf_unified
-% with update_type = 'ehgf'.
+% with update_type = 'ehgf'. Uses a safe precision update that prevents negative precision values.
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_unified.m.
 %
 % This function can be called in two ways:
 % (1) ehgf(r, p)

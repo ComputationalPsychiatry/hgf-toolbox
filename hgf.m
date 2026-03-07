@@ -2,7 +2,10 @@ function [traj, infStates] = hgf(r, p, varargin)
 % Standard Hierarchical Gaussian Filter for continuous inputs.
 %
 % This is a backward-compatible wrapper that calls hgf_unified
-% with update_type = 'hgf'.
+% with update_type = 'hgf'. Uses the classic precision update equations from Mathys et al. (2011).
+%
+% For detailed documentation of inputs, outputs, and the update equations,
+% see hgf_unified.m.
 %
 % This function can be called in two ways:
 % (1) hgf(r, p)
