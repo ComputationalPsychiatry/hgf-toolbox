@@ -1,4 +1,16 @@
 %% HGF Toolbox Demo
+%% Setup
+% Ensure the toolbox is on the MATLAB path. If you have already run
+% |setup| from the toolbox root, this section does nothing.
+
+if ~exist('fitModel', 'file')
+    % Locate the toolbox root (parent of demo/)
+    activeDoc = matlab.desktop.editor.getActive();
+    demodir   = fileparts(activeDoc.Filename);
+    toolboxRoot = fileparts(demodir);
+    run(fullfile(toolboxRoot, 'setup.m'));
+end
+
 %% Load binary input
 % First, we will load the example binary inputs $u$ provided in the file example_binary_input.txt:
 
