@@ -63,34 +63,6 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
 
 ## Release notes
 
-### v8.2
-- **Reorganized directory structure**: Files are now organized into
-  `core/`, `building_blocks/`, `perceptual/`, `observation/`,
-  `plotting/`, `utilities/`, and `demo/` directories instead of a
-  flat top-level layout
-- **Added `setup.m`**: Run once to add all subdirectories to the
-  MATLAB path. All function calls remain unchanged — no path prefixes
-  needed
-- Updated `ARCHITECTURE.md` with directory structure tree
-- Updated `README.md` installation instructions
-
-### v8.1
-- **Added `ARCHITECTURE.md`**: Comprehensive guide to file organization,
-  naming conventions, model inventory, parameter notation, the unified
-  HGF/eHGF architecture, and the `traj`/`infStates` data structures
-- **Added INPUT/OUTPUT documentation** to all 18 observation model files
-  and all 14 simulation (`*_sim.m`) files
-- **Expanded `sampleModel.m` documentation** with full INPUT/OUTPUT
-  descriptions and usage examples, matching the quality of `fitModel.m`
-- **Enriched wrapper files** (e.g., `hgf.m`, `ehgf_binary.m`) with
-  context on when to use them, which unified model they delegate to,
-  and cross-references to detailed documentation
-- **Fixed garbled comments** in `hgf_binary_pu.m`
-- **Removed outdated `Manual.pdf`** (replaced by `ARCHITECTURE.md` and
-  `hgf_demo.mlx`)
-- **Expanded README.md** with quick-start example and documentation
-  section
-
 ### v8.0
 - **Unified HGF/eHGF architecture**: All HGF and eHGF model variants
   now share the same update equations via unified implementation files
@@ -102,17 +74,30 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
   appear in only one place
 - Original model files (e.g., `hgf_binary.m`, `ehgf_binary.m`) are now
   thin backward-compatible wrappers
-- All config files now include `c.update_type` field
-- Updated `hgf_demo.m` documentation
 - **Config factory pattern**: Created `*_config_base.m` files that
   generate configs for both HGF and eHGF variants. Each existing config
   file (e.g., `hgf_binary_config.m`, `ehgf_binary_config.m`) is now a
   thin wrapper calling the shared base with the appropriate update_type
 - **Consolidated transp/namep/plotTraj files**: eHGF versions of
   identical file pairs now delegate to their HGF counterparts
-  (5 transp, 5 namep, 2 plotTraj pairs consolidated)
 - **Replaced `eval()` calls** in `fitModel.m` and `sampleModel.m` with
   `str2func()` for safer function resolution
+- **Reorganized directory structure**: Files are now organized into
+  `core/`, `building_blocks/`, `perceptual/`, `observation/`,
+  `plotting/`, `utilities/`, and `demo/` directories instead of a
+  flat top-level layout
+- **Added `setup.m`**: Run once to add all subdirectories to the
+  MATLAB path. All function calls remain unchanged — no path prefixes
+  needed
+- **Added `ARCHITECTURE.md`**: Comprehensive guide to file organization,
+  naming conventions, model inventory, parameter notation, the unified
+  HGF/eHGF architecture, and the `traj`/`infStates` data structures
+- **Added INPUT/OUTPUT documentation** to all observation model files,
+  simulation files, and `sampleModel.m`
+- **Updated `hgf_demo`** with unified architecture explanations, auto
+  path setup for Live Scripts, and equation fixes
+- **Removed outdated `Manual.pdf`** (replaced by `ARCHITECTURE.md` and
+  `hgf_demo.mlx`)
 
 ### v7.2
 - Switched to MIT licence
