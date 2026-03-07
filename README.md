@@ -55,10 +55,15 @@ hgf_demo.pdf.
   thin backward-compatible wrappers
 - All config files now include `c.update_type` field
 - Updated `hgf_demo.m` documentation
-- Config factory pattern for shared HGF/eHGF configuration
-- Consolidated transp/namep/plotTraj files to eliminate duplication
-- Observation model family consolidation (softmax, condhalluc)
-- Replaced `eval()` calls in `fitModel.m` with model registry
+- **Config factory pattern**: Created `*_config_base.m` files that
+  generate configs for both HGF and eHGF variants. Each existing config
+  file (e.g., `hgf_binary_config.m`, `ehgf_binary_config.m`) is now a
+  thin wrapper calling the shared base with the appropriate update_type
+- **Consolidated transp/namep/plotTraj files**: eHGF versions of
+  identical file pairs now delegate to their HGF counterparts
+  (5 transp, 5 namep, 2 plotTraj pairs consolidated)
+- **Replaced `eval()` calls** in `fitModel.m` and `sampleModel.m` with
+  `str2func()` for safer function resolution
 
 ### v7.2
 - Switched to MIT licence

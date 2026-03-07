@@ -213,8 +213,10 @@ hgf_binary_plotTraj(sample2)
 %   r.c_prc.update_type = 'ehgf'  % enhanced HGF
 %
 % The wrapper functions _hgf_binary.m_ and _ehgf_binary.m_ set this flag
-% automatically for backward compatibility. Alternatively, you can set
-% update_type directly in your configuration and use the unified function.
+% automatically for backward compatibility. Similarly, the config files
+% (e.g., _hgf_binary_config.m_ and _ehgf_binary_config.m_) are thin
+% wrappers around shared base functions (e.g., _hgf_binary_config_base.m_)
+% that hold all the prior definitions in one place.
 
 esim = simModel(u,...
                      'ehgf_binary',...
