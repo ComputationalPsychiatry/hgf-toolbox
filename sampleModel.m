@@ -22,7 +22,8 @@ r.c_obs = [];
 % Override default settings with arguments from the command line
 if nargin > 1 && ~isempty(varargin{1})
     if isstr(varargin{1})
-        r.c_prc = eval(varargin{1});
+        fh = str2func(varargin{1});
+        r.c_prc = fh();
     else
         r.c_prc = varargin{1};
         % Ensure consistency of configuration of priors
@@ -32,7 +33,8 @@ end
 
 if nargin > 2 && ~isempty(varargin{2})
     if isstr(varargin{2})
-        r.c_obs = eval(varargin{2});
+        fh = str2func(varargin{2});
+        r.c_obs = fh();
     else
         r.c_obs = varargin{2};
         % Ensure consistency of configuration of priors
