@@ -157,6 +157,9 @@ end
 % Model function handle
 c.prc_fun = @ehgf_ar1_binary;
 
+% Update type: 'hgf' (classic) or 'ehgf' (enhanced)
+c.update_type = 'ehgf';
+
 % Handle to function that transforms perceptual parameters to their native space
 % from the space they are estimated in
 c.transp_prc_fun = @ehgf_ar1_binary_transp;

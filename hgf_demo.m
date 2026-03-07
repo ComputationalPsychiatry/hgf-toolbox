@@ -204,6 +204,17 @@ hgf_binary_plotTraj(sample2)
 % and associated belief trajectories and behaviours. For example, using the parameter 
 % values below leads to an error in the classic HGF, while the eHGF can handle 
 % this easily.
+%
+% Internally, the HGF and eHGF now share the same unified implementation
+% (e.g., _hgf_binary_unified.m_). They differ only in the precision update
+% at volatility levels. The choice is controlled by a flag:
+%
+%   r.c_prc.update_type = 'hgf'   % classic HGF
+%   r.c_prc.update_type = 'ehgf'  % enhanced HGF
+%
+% The wrapper functions _hgf_binary.m_ and _ehgf_binary.m_ set this flag
+% automatically for backward compatibility. Alternatively, you can set
+% update_type directly in your configuration and use the unified function.
 
 esim = simModel(u,...
                      'ehgf_binary',...
@@ -329,12 +340,13 @@ est2 = fitModel(sim2.y,...
 
 fit_plotCorr(est2)
 hgf_plotTraj(est2)
-%% Enhanced HGF
+%% Enhanced HGF for continuous inputs
 % As above for binary inputs, we can use the enhanced HGF (eHGF) also for inputs 
-% on a continuous scale.
+% on a continuous scale. We use _ehgf_ as the perceptual model and
+% _ehgf_config_ for fitting.
 
 esim2 = simModel(usdchf,...
-                      'hgf',...
+                      'ehgf',...
                       [1.04 1 0.0001 0.1 0 0 1 -13  -2 1e4],...
                       'gaussian_obs',...
                       0.00002,...
@@ -343,10 +355,10 @@ ehgf_plotTraj(esim2)
 %%
 eest2 = fitModel(esim2.y,...
                        usdchf,...
-                       'hgf_config',...
+                       'ehgf_config',...
                        'gaussian_obs_config',...
                        'quasinewton_optim_config');
-hgf_plotTraj(eest2)
+ehgf_plotTraj(eest2)
 fit_plotCorr(eest2)
 %% Plotting residual diagnostics
 % It's often helpful to look at the residuals (ie, the differences between predicted 
