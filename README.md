@@ -30,8 +30,8 @@ setup
 ## Quick start
 
 ```matlab
-% Load example binary input (in demo/)
-u = load('example_binary_input.txt');
+% Load example binary input (from the toolbox root directory)
+u = load('demo/example_binary_input.txt');
 
 % Fit a 3-level binary HGF with unit-square sigmoid response model
 est = fitModel([], u, 'hgf_binary_config', 'bayes_optimal_binary_config', 'quasinewton_optim_config');
