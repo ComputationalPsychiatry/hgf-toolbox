@@ -1,6 +1,6 @@
 %% This script contains the raw commands of the tutorial demo (hgfTB_demo.m) for the HGF toolbox
 
-demodir = fileparts(mfilename('fullpath'));
+demodir = fileparts(which('hgf_demo_commands'));
 %%
 u = load(fullfile(demodir, 'example_binary_input.txt'));
 

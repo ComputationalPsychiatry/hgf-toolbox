@@ -2,7 +2,7 @@
 %% Load binary input
 % First, we will load the example binary inputs $u$ provided in the file example_binary_input.txt:
 
-demodir = fileparts(mfilename('fullpath'));
+demodir = fileparts(which('hgf_demo_commands'));
 u = load(fullfile(demodir, 'example_binary_input.txt'));
 %% 
 % The inputs are simply a time series of 320 0s and 1s. This is the input sequence 
