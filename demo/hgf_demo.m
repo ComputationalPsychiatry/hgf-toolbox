@@ -1,7 +1,7 @@
 %% HGF Toolbox Demo
 %% Setup
-% Ensure the toolbox is on the MATLAB path. If you have already run
-% |setup| from the toolbox root, this section does nothing.
+% Ensure the toolbox is on the MATLAB path. If you have already run |setup| 
+% from the toolbox root, this section does nothing.
 
 if ~exist('fitModel', 'file')
     % Locate the toolbox root (parent of demo/)
@@ -10,7 +10,6 @@ if ~exist('fitModel', 'file')
     toolboxRoot = fileparts(demodir);
     run(fullfile(toolboxRoot, 'setup.m'));
 end
-
 %% Load binary input
 % First, we will load the example binary inputs $u$ provided in the file example_binary_input.txt:
 
@@ -33,12 +32,11 @@ axis([1, 320, -0.1, 1.1])
 % mean the particular parameter values that produce the least cumulative Shannon 
 % surprise for a given input sequence $u$. This means that an agent using this 
 % parameter setting would experience the least possible surprise when exposed 
-% to the given inputs under the given perceptual model.
-% The point of estimating the optimal parameter values is that we can use them 
-% as prior means when fitting observed responses. If the agents whose response 
-% we're observing are reasonably well able to perform their task, we may assume 
-% that their parameter values are distributed around the optimal values.
-% We provide fitModel with four arguments.
+% to the given inputs under the given perceptual model. The point of estimating 
+% the optimal parameter values is that we can use them as prior means when fitting 
+% observed responses. If the agents whose response we're observing are reasonably 
+% well able to perform their task, we may assume that their parameter values are 
+% distributed around the optimal values. We provide fitModel with four arguments.
 %% 
 % * The first argument, which would normally be the observed responses, is empty 
 % (ie, []) here because the optimal parameter values are independent of any responses.
@@ -65,12 +63,11 @@ bopars = fitModel([],...
 % (NaN) because in the binary HGF the first level is discrete, not continuous. 
 % At the second level, we find an optimal value of, for example, $\omega_2=-3.43$, 
 % and at the third level one of, for example, $\omega_3=-6.01$ (this will vary 
-% on different runs of this script).
-% The other parameters are fixed to a particular value because their prior variance 
-% has been set to zero in the configuration file _hgf_binary_config.m._ 
-% This means that their posterior means, displayed here, are the same as the prior 
-% means set in _hgf_binary_config.m_.
-% Their meanings are
+% on different runs of this script). The other parameters are fixed to a particular 
+% value because their prior variance has been set to zero in the configuration 
+% file _hgf_binary_config.m._ This means that their posterior means, displayed 
+% here, are the same as the prior means set in _hgf_binary_config.m_. Their meanings 
+% are
 %% 
 % * $\mu_0$ and $\sigma_0$ are the initial values of the perceptual state
 % * $\rho$ is a drift parameter, fixed to zero (ie, no drift) in this example
@@ -95,9 +92,9 @@ sim = simModel(u,...
                      123456789);
 %% 
 % The general meaning of the arguments supplied to simModel is explained in 
-% the manual and in the file _simModel.m_. The specific meaning of each 
-% argument in this example is explained in the configuration files of the perceptual 
-% model (_hgf_binary_config.m_) and of the response model (_unitsq_sgm_config.m_).
+% the manual and in the file _simModel.m_. The specific meaning of each argument 
+% in this example is explained in the configuration files of the perceptual model 
+% (_hgf_binary_config.m_) and of the response model (_unitsq_sgm_config.m_).
 %% Plot simulated responses
 % We can plot our simulated responses $y$ using the plotting function for _hgf_binary_ 
 % models.
@@ -149,8 +146,8 @@ fit_plotCorr(est)
 %% 
 % In this case, there is nothing to worry about. Unless their correlation is 
 % very close to +1 or -1, two parameters are identifiable, meaning that they describe 
-% distinct aspects of the data.
-% The posterior parameter correlation matrix is stored in est.optim.Corr,
+% distinct aspects of the data. The posterior parameter correlation matrix is 
+% stored in est.optim.Corr,
 
 disp(est.optim.Corr)
 %% 
@@ -199,10 +196,10 @@ align_priors(unitsq_sgm_config)
 % because fitModel and similar functions automatically take care of this.
 %% Sampling from the priors
 % An important sanity check for any model is that its prior predictive distribution 
-% should make sense. We can check this using the function sampleModel, which 
-% samples parameter values randomly from the priors and simulates data with these 
-% values. The distribution of simulated behaviours and belief trajectories should 
-% exhaust, but remain within, the range of plausible behaviours and belief trajectories. 
+% should make sense. We can check this using the function sampleModel, which samples 
+% parameter values randomly from the priors and simulates data with these values. 
+% The distribution of simulated behaviours and belief trajectories should exhaust, 
+% but remain within, the range of plausible behaviours and belief trajectories. 
 % In our experience, initial choices of priors (including the defaults in this 
 % toolbox!) tend to be too loose and should be tightened in order for the prior 
 % predictive distribution to remain within the bounds of what is plausible.
@@ -217,19 +214,20 @@ hgf_binary_plotTraj(sample2)
 % and associated belief trajectories and behaviours. For example, using the parameter 
 % values below leads to an error in the classic HGF, while the eHGF can handle 
 % this easily.
-%
-% Internally, the HGF and eHGF now share the same unified implementation
-% (e.g., _hgf_binary_unified.m_). They differ only in the precision update
-% at volatility levels. The choice is controlled by a flag:
-%
+% 
+% Internally, the HGF and eHGF now share the same unified implementation (e.g., 
+% _hgf_binary_unified.m_). They differ only in the precision update at volatility 
+% levels. The choice is controlled by a flag:
+%%
+% 
 %   r.c_prc.update_type = 'hgf'   % classic HGF
 %   r.c_prc.update_type = 'ehgf'  % enhanced HGF
 %
-% The wrapper functions _hgf_binary.m_ and _ehgf_binary.m_ set this flag
-% automatically for backward compatibility. Similarly, the config files
-% (e.g., _hgf_binary_config.m_ and _ehgf_binary_config.m_) are thin
-% wrappers around shared base functions (e.g., _hgf_binary_config_base.m_)
-% that hold all the prior definitions in one place.
+%% 
+% The wrapper functions _hgf_binary.m_ and _ehgf_binary.m_ set this flag automatically 
+% for backward compatibility. Similarly, the config files (e.g., _hgf_binary_config.m_ 
+% and _ehgf_binary_config.m_) are thin wrappers around shared base functions (e.g., 
+% _hgf_binary_config_base.m_) that hold all the prior definitions in one place.
 
 esim = simModel(u,...
                      'ehgf_binary',...
@@ -248,8 +246,8 @@ disp(eest.optim.Corr)
 % Next, let's try to fit the same data using a different perceptual model while 
 % keeping the same response model. We will take the Rescorla-Wagner model _rw_binary_. 
 % Note that instead of first creating configuration structures by running the 
-% configuration files and calling fitModel with the configuration structures 
-% as arguments, we can also just use character strings with the names of the configuration 
+% configuration files and calling fitModel with the configuration structures as 
+% arguments, we can also just use character strings with the names of the configuration 
 % functions as arguments to fitModel.
 
 est1a = fitModel(sim.y,...
@@ -258,9 +256,9 @@ est1a = fitModel(sim.y,...
                        'unitsq_sgm_config',...
                        'quasinewton_optim_config');
 %% 
-% The single estimated perceptual parameter is the constant learning rate $\alpha$.
-% Just as for _hgf_binary_, we can plot posterior correlations and inferred 
-% trajectories for _rw_binary_.
+% The single estimated perceptual parameter is the constant learning rate $\alpha$. 
+% Just as for _hgf_binary_, we can plot posterior correlations and inferred trajectories 
+% for _rw_binary_.
 
 fit_plotCorr(est1a)
 rw_binary_plotTraj(est1a)
@@ -357,8 +355,8 @@ fit_plotCorr(est2)
 hgf_plotTraj(est2)
 %% Enhanced HGF for continuous inputs
 % As above for binary inputs, we can use the enhanced HGF (eHGF) also for inputs 
-% on a continuous scale. We use _ehgf_ as the perceptual model and
-% _ehgf_config_ for fitting.
+% on a continuous scale. We use _ehgf_ as the perceptual model and _ehgf_config_ 
+% for fitting.
 
 esim2 = simModel(usdchf,...
                       'ehgf',...
@@ -383,15 +381,14 @@ fit_plotCorr(eest2)
 
 fit_plotResidualDiagnostics(est2)
 %% 
-% Everything looks fine here - no obvious patterns to be seen.
-% An important point to note is that these are the residuals of the *response 
-% model*, not the perceptual model. Ultimately, we want to be able to predict 
-% responses, not just filter inputs, and the residuals of the response model capture 
-% the performance of the combination of perceptual and response models.
-% Looking at the same diagnostics for binary responses is less straightforward. 
-% The HGF Toolbox uses *Pearson residuals* in this case, defined as
-% $$r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)} \left(1-\hat{\mu}_1^{(k)}\right) 
-% }}$$
+% Everything looks fine here - no obvious patterns to be seen. An important 
+% point to note is that these are the residuals of the *response model*, not the 
+% perceptual model. Ultimately, we want to be able to predict responses, not just 
+% filter inputs, and the residuals of the response model capture the performance 
+% of the combination of perceptual and response models. Looking at the same diagnostics 
+% for binary responses is less straightforward. The HGF Toolbox uses *Pearson 
+% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)} 
+% \left(1-\hat{\mu}_1^{(k)}\right)  }}$
 
 fit_plotResidualDiagnostics(est)
 %% 
@@ -406,9 +403,9 @@ fit_plotResidualDiagnostics(est)
 % It is often useful to average parameters from several estimations, for instance 
 % to compare groups of subjects. This can be achieved by using the function _bayesian_parameter_average()_ 
 % which takes into account the covariance structure between the parameters and 
-% weights individual estimates according to their precision.
-% We begin by simulating responses from another fictive agent and estimating 
-% the parameters behind the simulated responses:
+% weights individual estimates according to their precision. We begin by simulating 
+% responses from another fictive agent and estimating the parameters behind the 
+% simulated responses:
 
 sim2b = simModel(usdchf,...
                        'hgf',...
