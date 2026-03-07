@@ -34,7 +34,7 @@ function r = sampleModel(inputs, varargin)
 %   sam.traj     Belief trajectories implied by sampled parameters
 %
 % EXAMPLE:
-%   u = load('example_binary_input.txt');
+%   u = load('demo/example_binary_input.txt');
 %   sam = sampleModel(u, 'ehgf_binary_config', 'unitsq_sgm_config', 12345);
 %   hgf_binary_plotTraj(sam)
 

@@ -2,7 +2,8 @@
 %% Load binary input
 % First, we will load the example binary inputs $u$ provided in the file example_binary_input.txt:
 
-u = load('example_binary_input.txt');
+demodir = fileparts(mfilename('fullpath'));
+u = load(fullfile(demodir, 'example_binary_input.txt'));
 %% 
 % The inputs are simply a time series of 320 0s and 1s. This is the input sequence 
 % used in the task of Iglesias et al. (2013), _Neuron_, *80*(2), 519-530.
@@ -257,7 +258,7 @@ rw_binary_plotTraj(est1a)
 % the exchange rate of the US Dollar to the Swiss Franc during much of 2010 and 
 % 2011.
 
-usdchf = load('example_usdchf.txt');
+usdchf = load(fullfile(demodir, 'example_usdchf.txt'));
 %% 
 % As before, we'll first estimate the Bayes optimal parameter values. This time, 
 % we'll take a 2-level HGF for continuous-scaled inputs.

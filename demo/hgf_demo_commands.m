@@ -1,7 +1,8 @@
 %% This script contains the raw commands of the tutorial demo (hgfTB_demo.m) for the HGF toolbox
 
+demodir = fileparts(mfilename('fullpath'));
 %%
-u = load('example_binary_input.txt');
+u = load(fullfile(demodir, 'example_binary_input.txt'));
 
 %%
 bopars = fitModel([], u, 'hgf_binary_config', 'bayes_optimal_binary_config', 'quasinewton_optim_config');
@@ -37,7 +38,7 @@ fit_plotCorr(est1a)
 rw_binary_plotTraj(est1a)
 
 %%
-usdchf = load('example_usdchf.txt');
+usdchf = load(fullfile(demodir, 'example_usdchf.txt'));
 
 %%
 bopars2 = fitModel([], usdchf, 'hgf_config', 'bayes_optimal_config', 'quasinewton_optim_config');
