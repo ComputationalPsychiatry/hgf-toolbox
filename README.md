@@ -30,7 +30,11 @@ setup
 ## Quick start
 
 ```matlab
-% Load example binary input (from the toolbox root directory)
+% First, add the toolbox to your MATLAB path (only needed once per session)
+cd /path/to/hgf-toolbox
+setup
+
+% Load example binary input
 u = load('demo/example_binary_input.txt');
 
 % Fit a 3-level binary HGF with unit-square sigmoid response model
