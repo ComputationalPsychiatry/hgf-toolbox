@@ -18,14 +18,19 @@ Psychiatry, 12:680811. https://doi.org/10.3389/fpsyt.2021.680811
 
 ## Installation
 
-Move this folder to a location of your choice and add it to your Matlab
-path.
+Move this folder to a location of your choice and run `setup` in Matlab
+to add all subdirectories to the path:
+
+```matlab
+cd /path/to/hgf-toolbox
+setup
+```
 
 
 ## Quick start
 
 ```matlab
-% Load example binary input
+% Load example binary input (in demo/)
 u = load('example_binary_input.txt');
 
 % Fit a 3-level binary HGF with unit-square sigmoid response model
@@ -48,12 +53,23 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
   overview of file organization, naming conventions, the unified
   HGF/eHGF architecture, parameter notation, and the trajectory
   data structures.
-- **Tutorial demo**: Open `hgf_demo.mlx` in Matlab for an interactive
-  walkthrough. A PDF version is available in `hgf_demo.pdf`.
+- **Tutorial demo**: Open `demo/hgf_demo.mlx` in Matlab for an
+  interactive walkthrough.
 - **Source code**: All functions have header comments accessible via
   `help <function_name>` in Matlab.
 
 ## Release notes
+
+### v8.2
+- **Reorganized directory structure**: Files are now organized into
+  `core/`, `building_blocks/`, `perceptual/`, `observation/`,
+  `plotting/`, `utilities/`, and `demo/` directories instead of a
+  flat top-level layout
+- **Added `setup.m`**: Run once to add all subdirectories to the
+  MATLAB path. All function calls remain unchanged — no path prefixes
+  needed
+- Updated `ARCHITECTURE.md` with directory structure tree
+- Updated `README.md` installation instructions
 
 ### v8.1
 - **Added `ARCHITECTURE.md`**: Comprehensive guide to file organization,
