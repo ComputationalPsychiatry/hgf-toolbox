@@ -1,5 +1,4 @@
 # HGF Toolbox
-Release ID: $Format:%h %d$
 
 --- 
 
