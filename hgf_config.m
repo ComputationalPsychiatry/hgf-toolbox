@@ -149,6 +149,9 @@ end
 % Model function handle
 c.prc_fun = @hgf;
 
+% Update type: 'hgf' (classic) or 'ehgf' (enhanced)
+c.update_type = 'hgf';
+
 % Handle to function that transforms perceptual parameters to their native space
 % from the space they are estimated in
 c.transp_prc_fun = @hgf_transp;

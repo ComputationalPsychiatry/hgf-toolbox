@@ -89,3 +89,17 @@ bpa = bayesian_parameter_average(est2, est2b);
 fit_plotCorr(bpa)
 %%
 hgf_plotTraj(bpa)
+
+%% Enhanced HGF (eHGF)
+% The eHGF uses a safe precision update that prevents negative precision.
+% It shares the same unified implementation as the classic HGF, controlled
+% by the update_type flag ('hgf' or 'ehgf') in the config.
+
+%%
+esim = simModel(u, 'ehgf_binary', [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -4 3], 'unitsq_sgm', 5, 123456789);
+%%
+ehgf_binary_plotTraj(esim)
+%%
+eest = fitModel(esim.y, esim.u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewton_optim_config');
+%%
+ehgf_binary_plotTraj(eest)

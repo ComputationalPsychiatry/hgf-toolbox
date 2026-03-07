@@ -24,9 +24,14 @@ path.
 
 ## Documentation and configuration
 
-Documentation can be found in the manual contained in the Manual.pdf
-file. This will point you to the relevant configuration files. Further
-documentation is available throughout the source code.
+Documentation can be found in the tutorial demo (see below) and
+throughout the source code.
+
+**Note:** The Manual.pdf is outdated and does not reflect the current
+architecture. It references old `tapas_`-prefixed function names and
+does not document the eHGF or the unified `update_type` mechanism.
+Please refer to `hgf_demo.mlx` and the source code for current
+documentation.
 
 
 ## Tutorial demo
@@ -36,6 +41,24 @@ opening hgf_demo.mlx in Matlab. A PDF version is available in
 hgf_demo.pdf.
 
 ## Release notes
+
+### v8.0
+- **Unified HGF/eHGF architecture**: All HGF and eHGF model variants
+  now share the same update equations via unified implementation files
+  (e.g., `hgf_binary_unified.m`). The choice between classic HGF and
+  enhanced HGF is controlled by a single flag:
+  `r.c_prc.update_type = 'hgf'` or `'ehgf'`
+- Extracted shared building-block functions (`hgf_volatility_update.m`,
+  `hgf_prediction.m`, `hgf_pihat.m`, etc.) so that the update equations
+  appear in only one place
+- Original model files (e.g., `hgf_binary.m`, `ehgf_binary.m`) are now
+  thin backward-compatible wrappers
+- All config files now include `c.update_type` field
+- Updated `hgf_demo.m` documentation
+- Config factory pattern for shared HGF/eHGF configuration
+- Consolidated transp/namep/plotTraj files to eliminate duplication
+- Observation model family consolidation (softmax, condhalluc)
+- Replaced `eval()` calls in `fitModel.m` with model registry
 
 ### v7.2
 - Switched to MIT licence
