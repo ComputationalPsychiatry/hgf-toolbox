@@ -1,5 +1,11 @@
 %% This script contains the raw commands of the tutorial demo (hgfTB_demo.m) for the HGF toolbox
 
+if ~exist('fitModel', 'file')
+    activeDoc = matlab.desktop.editor.getActive();
+    toolboxRoot = fileparts(fileparts(activeDoc.Filename));
+    run(fullfile(toolboxRoot, 'setup.m'));
+end
+
 demodir = fileparts(which('hgf_demo_commands'));
 %%
 u = load(fullfile(demodir, 'example_binary_input.txt'));
