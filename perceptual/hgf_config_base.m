@@ -1,10 +1,11 @@
 function c = hgf_config_base(update_type)
 % Base configuration for the Hierarchical Gaussian Filter (HGF) for continuous inputs.
-% This factory function generates configs for both HGF and eHGF variants.
+% This factory function generates configs for HGF, eHGF, and uHGF variants.
 %
 % Usage:
 %   c = hgf_config_base('hgf')   % classic HGF
 %   c = hgf_config_base('ehgf')  % enhanced HGF
+%   c = hgf_config_base('uhgf')  % unbounded HGF
 %
 % The HGF is the model introduced in
 % Mathys C, Daunizeau J, Friston, KJ, and Stephan KE. (2011). A Bayesian foundation
@@ -56,8 +57,8 @@ function c = hgf_config_base(update_type)
 %   then use the optimal parameters as your new prior means for the perceptual parameters.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
@@ -97,8 +98,15 @@ c.irregular_intervals = false;
 % Format: row vectors of length n_levels
 % For all but the first level, this is usually best
 % kept fixed to 1 (determines origin on x_i-scale).
-c.mu_0mu = [99991, 1];
-c.mu_0sa = [99992, 0];
+% NOTE: Prior values differ for the uHGF variant.
+switch update_type
+    case 'uhgf'
+        c.mu_0mu = [99991, 0];
+        c.mu_0sa = [99992, 2];
+    otherwise
+        c.mu_0mu = [99991, 1];
+        c.mu_0sa = [99992, 0];
+end
 
 c.logsa_0mu = [99993, log(0.1)];
 c.logsa_0sa = [    1,        1];
@@ -118,15 +126,29 @@ c.logkasa = [     0];
 
 % Omegas
 % Format: row vector of length n_levels
-c.ommu = [99993,  -4];
-c.omsa = [  4^2, 4^2];
+% NOTE: Prior values differ for the uHGF variant.
+switch update_type
+    case 'uhgf'
+        c.ommu = [99993, -8];
+        c.omsa = [ 4^2, 4^2];
+    otherwise
+        c.ommu = [99993,  -4];
+        c.omsa = [  4^2, 4^2];
+end
 
 % Pi_u
 % Format: scalar
 % Fix this to Inf (no percpeptual uncertainty) by setting
 % logpiumu = Inf; logpiusa = 0;
-c.logpiumu = -99993;
-c.logpiusa = 2^2;
+% NOTE: Prior values differ for the uHGF variant.
+switch update_type
+    case 'uhgf'
+        c.logpiumu = -log(0.0001);
+        c.logpiusa = 0;
+    otherwise
+        c.logpiumu = -99993;
+        c.logpiusa = 2^2;
+end
 
 % Gather prior settings in vectors
 c.priormus = [

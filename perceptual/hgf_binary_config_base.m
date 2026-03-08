@@ -1,10 +1,11 @@
 function c = hgf_binary_config_base(update_type)
 % Base configuration for the HGF for binary inputs (no perceptual uncertainty).
-% This factory function generates configs for both HGF and eHGF variants.
+% This factory function generates configs for HGF, eHGF, and uHGF variants.
 %
 % Usage:
 %   c = hgf_binary_config_base('hgf')   % classic HGF
 %   c = hgf_binary_config_base('ehgf')  % enhanced HGF
+%   c = hgf_binary_config_base('uhgf')  % unbounded HGF
 %
 % The HGF is the model introduced in
 % Mathys C, Daunizeau J, Friston, KJ, and Stephan KE. (2011). A Bayesian foundation
@@ -45,8 +46,8 @@ function c = hgf_binary_config_base(update_type)
 %   to determine the Bayes optimal perceptual parameters.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
@@ -105,6 +106,9 @@ switch update_type
         c.omsa = [NaN, 4^2, 4^2];
     case 'ehgf'
         c.ommu = [NaN,  -3,   2];
+        c.omsa = [NaN,   4,   4];
+    case 'uhgf'
+        c.ommu = [NaN,  -3,  -6];
         c.omsa = [NaN,   4,   4];
 end
 
