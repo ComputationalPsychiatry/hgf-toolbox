@@ -1,11 +1,12 @@
 function [traj, infStates] = hgf_unified(r, p, varargin)
 % Unified Hierarchical Gaussian Filter for continuous inputs.
 %
-% This function implements both the standard HGF and the enhanced HGF (eHGF)
-% for continuous inputs with n levels. The update type is controlled by the
-% configuration setting r.c_prc.update_type:
+% This function implements the standard HGF, enhanced HGF (eHGF), and unbounded
+% HGF (uHGF) for continuous inputs with n levels. The update type is controlled
+% by the configuration setting r.c_prc.update_type:
 %   'hgf'  - Standard HGF (Mathys et al., 2011)
 %   'ehgf' - Enhanced HGF (safe precision updates, prevents negative precision)
+%   'uhgf' - Unbounded HGF (dual quadratic approximation with interpolation)
 %
 % This function can be called in two ways:
 % (1) hgf_unified(r, p)
@@ -23,11 +24,8 @@ end
 
 % Transform parameters back to their native space if needed
 if ~isempty(varargin) && strcmp(varargin{1},'trans')
-    if strcmp(update_type, 'hgf')
-        p = hgf_transp(r, p);
-    else
-        p = ehgf_transp(r, p);
-    end
+    transp_fun = str2func([update_type, '_transp']);
+    p = transp_fun(r, p);
 end
 
 % Number of levels
@@ -107,7 +105,11 @@ for k = 2:1:n
 
         % Weighting factor and v for last level
         v(k,l)   = t(k) * th;
-        v(k,l-1) = t(k) * exp(ka(l-1) * mu(k-1,l) + om(l-1));
+        if strcmp(update_type, 'uhgf')
+            v(k,l-1) = t(k) * exp(ka(l-1) * muhat(k,l) + om(l-1));
+        else
+            v(k,l-1) = t(k) * exp(ka(l-1) * mu(k-1,l) + om(l-1));
+        end
 
         [pi(k,l), mu(k,l), ~, w(k,l-1)] = hgf_volatility_update(...
             muhat(k,l), pihat(k,l), ...
