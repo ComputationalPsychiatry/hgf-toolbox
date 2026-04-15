@@ -71,26 +71,36 @@ elseif strcmp(update_type, 'uhgf')
     v_jm1 = t_k * exp(ka_jm1 * muhat_j + om_jm1);
     w_jm1 = v_jm1 / (1/pi_prev_jm1 + v_jm1);
 
-    % First quadratic approximation (at the prediction)
+    % First quadratic approximation L1 (at the prediction)
     pi1 = pihat_j + 1/2 * ka_jm1^2 * w_jm1 * (1 - w_jm1);
     mu1 = muhat_j + 1/2 * 1/pi1 * ka_jm1 * w_jm1 * da_jm1;
 
     % Auxiliary parameters for second approximation
-    al_aux = 1/pi_prev_jm1;
-    be_aux = 1/pi_jm1 + (mu_jm1 - muhat_jm1)^2;
-    ga_aux = muhat_j;
+    al_aux = 1/pi_prev_jm1;                              % sigma_dagger^0
+    be_aux = 1/pi_jm1 + (mu_jm1 - muhat_jm1)^2;         % total posterior uncertainty
 
-    % Second quadratic approximation (at alternative expansion point)
-    x2 = log(al_aux * (2 + sqrt(3)));
-    w2 = t_k * exp(ka_jm1 * x2 + om_jm1) / (al_aux + t_k * exp(ka_jm1 * x2 + om_jm1));
-    da2 = be_aux / (al_aux + t_k * exp(ka_jm1 * x2 + om_jm1)) - 1;
-    pi2 = pihat_j + 1/2 * ka_jm1^2 * w2 * (w2 + (2 * w2 - 1) * da2);
-    muhat2 = (2 * x2 * pi2 - x2 + ga_aux) / (2 * pi2);
-    mu2 = muhat2 + 1/2 * 1/pi2 * ka_jm1 * w2 * da2;
+    % Second quadratic approximation L2 (at alternative expansion point phi)
+    %
+    % The canonical expansion point phi_canon = log(al_aux*(2+sqrt(3)))
+    % lives in the canonical exponent space y = log(t_k) + kappa*x + omega.
+    % The native-space expansion point is:
+    phi_canon  = log(al_aux * (2 + sqrt(3)));
+    phi_full   = (phi_canon - log(t_k) - om_jm1) / ka_jm1;
 
-    % Interpolation via sigmoid blending
-    thetal = sqrt(1.2 * be_aux / (al_aux * pi1));
-    b = 1/(1 + exp(-8 * (ga_aux - thetal))) * (1 - 1/(1 + exp(-ga_aux)));
+    % At phi_full, t_k*exp(kappa*phi_full + omega) = al_aux*(2+sqrt(3))
+    % by construction. Use this directly to avoid numerical issues.
+    exp_at_phi = al_aux * (2 + sqrt(3));
+    w2  = exp_at_phi / (al_aux + exp_at_phi);         % = (2+sqrt(3))/(3+sqrt(3))
+    da2 = be_aux / (al_aux + exp_at_phi) - 1;
+
+    pi2    = pihat_j + 1/2 * ka_jm1^2 * w2 * (w2 + (2 * w2 - 1) * da2);
+    muhat2 = ((pi2 - pihat_j) * phi_full + pihat_j * muhat_j) / pi2;
+    mu2    = muhat2 + 1/2 * 1/pi2 * ka_jm1 * w2 * da2;
+
+    % Sigmoid blending in canonical exponent space y = log(t_k) + kappa*muhat + omega
+    y_pred  = log(t_k) + ka_jm1 * muhat_j + om_jm1;
+    theta_l = -sqrt(1.2 * 2 * be_aux / al_aux);
+    b = 1/(1 + exp(-8 * (y_pred - theta_l))) * (1 - 1/(1 + exp(-y_pred)));
 
     pi_j = (1 - b) * pi1 + b * pi2;
     mu_j = (1 - b) * mu1 + b * mu2;
