@@ -5,13 +5,14 @@ function c = hgf_ar1_binary_config_base(update_type)
 % Usage:
 %   c = hgf_ar1_binary_config_base('hgf')   % classic HGF
 %   c = hgf_ar1_binary_config_base('ehgf')  % enhanced HGF
+%   c = hgf_ar1_binary_config_base('uhgf')  % unbounded HGF
 %
-% NOTE: The eHGF variant includes additional rho parameters and uses different
+% NOTE: The eHGF and uHGF variants include additional rho parameters and use different
 % default priors for logsa_0, phi, and omega compared to the HGF variant.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
@@ -35,7 +36,7 @@ c.mu_0sa = [NaN, 0, 0];
 switch update_type
     case 'hgf'
         c.logsa_0mu = [NaN, log(0.006), log(4)];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.logsa_0mu = [NaN,   log(0.1), log(1)];
 end
 c.logsa_0sa = [NaN, 0, 0];
@@ -47,7 +48,7 @@ c.logsa_0sa = [NaN, 0, 0];
 switch update_type
     case 'hgf'
         c.logitphimu = [NaN, -Inf, tapas_logit(0.1,1)];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.logitphimu = [NaN, -Inf, tapas_logit(0.5,1)];
 end
 c.logitphisa = [NaN, 0, 2];
@@ -66,13 +67,13 @@ switch update_type
     case 'hgf'
         c.ommu = [NaN,  -2,  -6];
         c.omsa = [NaN, 4^2, 4^2];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.ommu = [NaN,  -3,   2];
         c.omsa = [NaN,   4,   4];
 end
 
 % Gather prior settings in vectors
-% NOTE: eHGF includes rho parameters; HGF does not.
+% NOTE: eHGF and uHGF include rho parameters; HGF does not.
 switch update_type
     case 'hgf'
         c.priormus = [
@@ -96,8 +97,8 @@ switch update_type
         % Check whether we have the right number of priors
         expectedLength = 5*c.n_levels+(c.n_levels-1);
 
-    case 'ehgf'
-        % Rhos (only in eHGF)
+    case {'ehgf', 'uhgf'}
+        % Rhos (only in eHGF/uHGF)
         c.rhomu = [NaN, 0, 0];
         c.rhosa = [NaN, 0, 0];
 

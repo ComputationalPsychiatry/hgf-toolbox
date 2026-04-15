@@ -6,12 +6,13 @@ function c = hgf_ar1_binary_mab_config_base(update_type)
 % Usage:
 %   c = hgf_ar1_binary_mab_config_base('hgf')   % classic HGF
 %   c = hgf_ar1_binary_mab_config_base('ehgf')  % enhanced HGF
+%   c = hgf_ar1_binary_mab_config_base('uhgf')  % unbounded HGF
 %
-% NOTE: The eHGF variant uses different default priors and n_bandits compared to HGF.
+% NOTE: The eHGF and uHGF variants use different default priors and n_bandits compared to HGF.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
@@ -27,7 +28,7 @@ c.n_levels = 3;
 switch update_type
     case 'hgf'
         c.n_bandits = 3;
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.n_bandits = 4;
 end
 
@@ -51,7 +52,7 @@ switch update_type
     case 'hgf'
         c.logitphimu = [NaN, tapas_logit(0.4,1), tapas_logit(0.2,1)];
         c.logitphisa = [NaN,                  1,                   1];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.logitphimu = [NaN, tapas_logit(0.4,1), tapas_logit(0.2,1)];
         c.logitphisa = [NaN,                  0,                   0];
 end
@@ -61,7 +62,7 @@ c.mmu = [NaN, c.mu_0mu(2), c.mu_0mu(3)];
 switch update_type
     case 'hgf'
         c.msa = [NaN, 0, 0];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.msa = [NaN, 0, 1];
 end
 
@@ -74,7 +75,7 @@ switch update_type
     case 'hgf'
         c.ommu = [NaN,   -2,   -2];
         c.omsa = [NaN,    1,    1];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.ommu = [NaN,   -3,    2];
         c.omsa = [NaN,    4,    4];
 end
