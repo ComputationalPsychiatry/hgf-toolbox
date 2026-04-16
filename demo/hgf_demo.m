@@ -215,7 +215,7 @@ hgf_binary_plotTraj(sample2)
 % values below leads to an error in the classic HGF, while the eHGF can handle 
 % this easily.
 % 
-% Internally, the HGF and eHGF now share the same unified implementation (e.g., 
+% Internally, the HGF and eHGF now share the same unified implementation (e.g.,  
 % _hgf_binary_unified.m_). They differ only in the precision update at volatility 
 % levels. The choice is controlled by a flag:
 %%
@@ -226,7 +226,7 @@ hgf_binary_plotTraj(sample2)
 %% 
 % The wrapper functions _hgf_binary.m_ and _ehgf_binary.m_ set this flag automatically 
 % for backward compatibility. Similarly, the config files (e.g., _hgf_binary_config.m_ 
-% and _ehgf_binary_config.m_) are thin wrappers around shared base functions (e.g., 
+% and _ehgf_binary_config.m_) are thin wrappers around shared base functions (e.g.,  
 % _hgf_binary_config_base.m_) that hold all the prior definitions in one place.
 
 esim = simModel(u,...
@@ -242,6 +242,83 @@ eest = fitModel(esim.y, esim.u, ehgf_binary_config, unitsq_sgm_config, optim_con
 ehgf_binary_plotTraj(eest)
 fit_plotCorr(eest)
 disp(eest.optim.Corr)
+%% Unbounded HGF (binary inputs)
+% The unbounded HGF (uHGF) is a third variant, based on a dual quadratic approximation 
+% with sigmoid-based interpolation at volatility levels. Like the eHGF, it handles 
+% parameter regions where the classic HGF fails; unlike the eHGF it makes no distributional 
+% assumptions on the sign of the precision update, so the posterior precision 
+% is unconstrained from below. Here we apply all three variants to the same binary 
+% input sequence so their belief trajectories can be compared directly.
+% 
+% The flag that selects the variant is:
+%%
+% 
+%   r.c_prc.update_type = 'uhgf'  % unbounded HGF
+%
+%% 
+% The wrapper _uhgf_binary.m_ sets this flag automatically. The same extreme 
+% parameter values used above for the eHGF work equally well for the uHGF:
+
+usim = simModel(u,...
+                     'uhgf_binary',...
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -4 3],...
+                     'unitsq_sgm',...
+                     5,...
+                     123456789);
+uhgf_binary_plotTraj(usim)
+%%
+uhgf_binary_config = uhgf_binary_config();
+uhgf_binary_config.ommu(2) = -5;
+uhgf_binary_config.ommu(3) = 4;
+uest = fitModel(usim.y, usim.u, uhgf_binary_config, unitsq_sgm_config, optim_config);
+uhgf_binary_plotTraj(uest)
+fit_plotCorr(uest)
+disp(uest.optim.Corr)
+%% AR(1) models
+% With binary inputs, there is often a parameter region where trajectories exhibit 
+% wide swings and large jumps. With previous update derivations (_hgf_ and _ehgf_ 
+% in the code), this could in some cases be due to limitations in the quadratic 
+% approximation used to derive the updates. With _uhgf_, updates are guaranteed 
+% to be stable, so any remaining swings and jumps are due to the inherent logic 
+% of the model. In particular, when large evolution rates (high omegas) allows 
+% the second-level state estimate to stray far from zero, leading to outcome-level 
+% predictions very close to zero or one, then an outcome contrary to the predicted 
+% one leads to a very large prediction error and correspondingly large updates 
+% at the second and third level. Let's create such a situation by rerunning the 
+% previous simulation with a higher omega_2:
+
+usim2 = simModel(u,...
+                     'uhgf_binary',...
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -3 3],...
+                     'unitsq_sgm',...
+                     5,...
+                     123456789);
+uhgf_binary_plotTraj(usim2)
+%% 
+% The way to avoid such implausible (but sound - under the assumptions of the 
+% generative model) trajectories is to adapt the generative model to contain AR(1) 
+% (auto-regressive first-order) processes instead of Gaussian random walks. As 
+% opposed to the latter, AR(1) processes are stationary, meaning that their long-term 
+% distribution has a constant mean and variance, which depend on two parameters: 
+% m for the mean, and phi (between 0 and 1) for the strength of the pull towards 
+% the mean. For phi = 0, we retrieve the Gaussian random walk.
+% 
+% The toolbox implements AR(1) models like this:
+
+usim3 = simModel(u,...
+                     'uhgf_ar1_binary',...
+                     [NaN 0 1 NaN 1 1 NaN 0 0.3 NaN 0 1 NaN 0 0 1 1.5 NaN -3 3],...
+                     'unitsq_sgm',...
+                     5,...
+                     123456789);
+hgf_ar1_binary_plotTraj(usim3)
+%% 
+% The simple change of introducing phi_3 = 0.3 regularizes the whole process 
+% (using the AR(1) model with phi_3 = 0 reproduces the previous Gaussian random 
+% walk-simulation - try it!).
+% 
+% *With this example as motivation, use of AR(1) models is encouraged to be 
+% the default in applying HGF to binary time series.*
 %% Changing the perceptual model
 % Next, let's try to fit the same data using a different perceptual model while 
 % keeping the same response model. We will take the Rescorla-Wagner model _rw_binary_. 
@@ -373,6 +450,27 @@ eest2 = fitModel(esim2.y,...
                        'quasinewton_optim_config');
 ehgf_plotTraj(eest2)
 fit_plotCorr(eest2)
+%% Unbounded HGF for continuous inputs
+% As above for binary inputs, the uHGF can also be applied to continuous inputs. 
+% Here we use the same USD/CHF time series and the same parameter values as for 
+% the eHGF above, making it straightforward to compare the resulting belief trajectories 
+% across all three variants.
+
+usim2 = simModel(usdchf,...
+                      'uhgf',...
+                      [1.04 1 0.0001 0.1 0 0 1 -13  -2 1e4],...
+                      'gaussian_obs',...
+                      0.00002,...
+                      123456789);
+uhgf_plotTraj(usim2)
+%%
+uest2 = fitModel(usim2.y,...
+                       usdchf,...
+                       'uhgf_config',...
+                       'gaussian_obs_config',...
+                       'quasinewton_optim_config');
+uhgf_plotTraj(uest2)
+fit_plotCorr(uest2)
 %% Plotting residual diagnostics
 % It's often helpful to look at the residuals (ie, the differences between predicted 
 % and actual responses) of a model. If the residual show any obvious patterns, 
@@ -387,7 +485,7 @@ fit_plotResidualDiagnostics(est2)
 % filter inputs, and the residuals of the response model capture the performance 
 % of the combination of perceptual and response models. Looking at the same diagnostics 
 % for binary responses is less straightforward. The HGF Toolbox uses *Pearson 
-% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)} 
+% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)}  
 % \left(1-\hat{\mu}_1^{(k)}\right)  }}$
 
 fit_plotResidualDiagnostics(est)

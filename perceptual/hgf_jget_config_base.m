@@ -5,12 +5,13 @@ function c = hgf_jget_config_base(update_type)
 % Usage:
 %   c = hgf_jget_config_base('hgf')   % classic HGF
 %   c = hgf_jget_config_base('ehgf')  % enhanced HGF
+%   c = hgf_jget_config_base('uhgf')  % unbounded HGF
 %
-% NOTE: The eHGF variant uses different default priors for several parameters.
+% NOTE: The eHGF and uHGF variants use different default priors for several parameters.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
@@ -44,7 +45,7 @@ switch update_type
 
         c.logsaa_0mu = [log(3), log(0.1)];
         c.logsaa_0sa = [     0,        0];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.logsax_0mu = [log(16), log(1)];
         c.logsax_0sa = [      1,      1];
 
@@ -76,7 +77,7 @@ switch update_type
 
         c.omamu = [  0,  -7];
         c.omasa = [5^2,   1];
-    case 'ehgf'
+    case {'ehgf', 'uhgf'}
         c.omumu = 8;
         c.omusa = 0;
 

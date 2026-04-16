@@ -1,7 +1,7 @@
 function [traj, infStates] = hgf_ar1_binary_mab_unified(r, p, varargin)
 % Unified HGF for AR(1) processes with binary outcomes in a multi-armed bandit setting.
 %
-% Supports both 'hgf' (classic) and 'ehgf' (enhanced) update equations
+% Supports 'hgf' (classic), 'ehgf' (enhanced), and 'uhgf' (unbounded) update equations
 % via the r.c_prc.update_type flag.
 %
 % This function can be called in two ways:
@@ -16,11 +16,11 @@ update_type = 'hgf';
 if isfield(r, 'c_prc') && isfield(r.c_prc, 'update_type')
     update_type = r.c_prc.update_type;
 end
-use_ehgf = strcmp(update_type, 'ehgf');
+use_extended = ~strcmp(update_type, 'hgf');
 
 % Transform parameters back to their native space if needed
 if ~isempty(varargin) && strcmp(varargin{1},'trans')
-    if use_ehgf
+    if use_extended
         p = ehgf_ar1_binary_mab_transp(r, p);
     else
         p = hgf_ar1_binary_mab_transp(r, p);
@@ -31,7 +31,7 @@ end
 try
     l = r.c_prc.n_levels;
 catch
-    if use_ehgf
+    if use_extended
         l = (length(p)+1)/7;
     else
         l = (length(p)+1)/6;
@@ -65,7 +65,7 @@ sa_0 = p(l+1:2*l);
 phi  = p(2*l+1:3*l);
 m    = p(3*l+1:4*l);
 
-if use_ehgf
+if use_extended
     rho  = p(4*l+1:5*l);
     ka   = p(5*l+1:6*l-1);
     om   = p(6*l:7*l-2);
@@ -175,11 +175,20 @@ for k = 2:1:n
                 % Precision of prediction
                 pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *mu(k-1,j+1,:) +om(j)));
 
-                % Weighting factor
+                % Weighting factor (hgf/ehgf use this; uhgf recomputes inside hgf_volatility_update)
                 v(k,j-1) = t(k) *exp(ka(j-1) *mu(k-1,j,y(k)) +om(j-1));
                 w(k,j-1) = v(k,j-1) *pihat(k,j-1,y(k));
 
-                if use_ehgf
+                if strcmp(update_type, 'uhgf')
+                    % uHGF: Delegate to hgf_volatility_update for dual quadratic + sigmoid blending
+                    [pi_j, mu_j, v(k,j-1), w(k,j-1)] = hgf_volatility_update(...
+                        muhat(k,j,y(k)), pihat(k,j,y(k)), ...
+                        ka(j-1), pihat(k,j-1,y(k)), da(k,j-1), ...
+                        mu(k-1,j,y(k)), om(j-1), pi(k-1,j-1,y(k)), ...
+                        pi(k,j-1,y(k)), mu(k,j-1,y(k)), muhat(k,j-1,y(k)), t(k), update_type);
+                    mu(k,j,:) = muhat(k,j,:) + (mu_j - muhat(k,j,y(k)));
+                    pi(k,j,:) = pihat(k,j,:) + (pi_j - pihat(k,j,y(k)));
+                elseif use_extended
                     % eHGF: Mean update first
                     mu(k,j,:) = muhat(k,j,:) +1/2 *1/pihat(k,j) *ka(j-1) *w(k,j-1) *da(k,j-1);
 
@@ -216,12 +225,21 @@ for k = 2:1:n
         % Precision of prediction
         pihat(k,l,:) = 1/(1/pi(k-1,l,:) +t(k) *th);
 
-        % Weighting factor
+        % Weighting factor (hgf/ehgf use this; uhgf recomputes inside hgf_volatility_update)
         v(k,l)   = t(k) *th;
         v(k,l-1) = t(k) *exp(ka(l-1) *mu(k-1,l,y(k)) +om(l-1));
         w(k,l-1) = v(k,l-1) *pihat(k,l-1,y(k));
 
-        if use_ehgf
+        if strcmp(update_type, 'uhgf')
+            % uHGF: Delegate to hgf_volatility_update for dual quadratic + sigmoid blending
+            [pi_l, mu_l, v(k,l-1), w(k,l-1)] = hgf_volatility_update(...
+                muhat(k,l,y(k)), pihat(k,l,y(k)), ...
+                ka(l-1), pihat(k,l-1,y(k)), da(k,l-1), ...
+                mu(k-1,l,y(k)), om(l-1), pi(k-1,l-1,y(k)), ...
+                pi(k,l-1,y(k)), mu(k,l-1,y(k)), muhat(k,l-1,y(k)), t(k), update_type);
+            mu(k,l,:) = muhat(k,l,:) + (mu_l - muhat(k,l,y(k)));
+            pi(k,l,:) = pihat(k,l,:) + (pi_l - pihat(k,l,y(k)));
+        elseif use_extended
             % eHGF: Mean update first
             mu(k,l,:) = muhat(k,l,:) +1/2 *1/pihat(k,l) *ka(l-1) *w(k,l-1) *da(k,l-1);
 

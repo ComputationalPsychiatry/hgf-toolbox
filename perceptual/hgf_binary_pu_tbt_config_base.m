@@ -5,12 +5,13 @@ function c = hgf_binary_pu_tbt_config_base(update_type)
 % Usage:
 %   c = hgf_binary_pu_tbt_config_base('hgf')   % classic HGF
 %   c = hgf_binary_pu_tbt_config_base('ehgf')  % enhanced HGF
+%   c = hgf_binary_pu_tbt_config_base('uhgf')  % unbounded HGF
 %
 % The uncertainty (alpha) is expected by the model in the second column of the input matrix.
 
 % Validate update_type
-if ~ismember(update_type, {'hgf', 'ehgf'})
-    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'' or ''ehgf''.');
+if ~ismember(update_type, {'hgf', 'ehgf', 'uhgf'})
+    error('tapas:hgf:InvalidUpdateType', 'update_type must be ''hgf'', ''ehgf'', or ''uhgf''.');
 end
 
 % Config structure
