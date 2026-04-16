@@ -63,6 +63,29 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
 
 ## Release notes
 
+### v8.1.0
+- **Unbounded HGF (uHGF)**: Introduced a third update variant alongside
+  the classic HGF and eHGF. The uHGF uses a dual quadratic approximation
+  with sigmoid-based interpolation at volatility levels, ensuring
+  positive posterior precision throughout. This makes the parameter space
+  truly unbounded — removing the constraints that cause the classic HGF
+  to fail and that the eHGF only partially relaxes. Selected via
+  `r.c_prc.update_type = 'uhgf'`
+- Added `uhgf` and `uhgf_binary` wrappers, configs, transp, and namep
+  files, plus uHGF variants of all specialised binary model families:
+  `uhgf_ar1_binary`, `uhgf_ar1_binary_mab`, `uhgf_binary_pu`,
+  `uhgf_binary_pu_tbt`, `uhgf_jget`
+- Extended all `*_config_base.m` factory functions to accept `'uhgf'`
+  as a third `update_type` argument
+- **Updated `hgf_demo`**: Added uHGF sections alongside the existing
+  HGF and eHGF sections — for binary inputs, continuous inputs, and the
+  AR(1) binary model — so all three variants can be compared on the same
+  time series
+
+### v8.0.1
+- Fix uHGF precision update to correctly account for time dependency
+  and transformation from canonical space
+
 ### v8.0
 - **Unified HGF/eHGF architecture**: All HGF and eHGF model variants
   now share the same update equations via unified implementation files
