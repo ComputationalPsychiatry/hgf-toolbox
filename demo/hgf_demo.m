@@ -267,10 +267,10 @@ usim = simModel(u,...
                      123456789);
 uhgf_binary_plotTraj(usim)
 %%
-uhgf_binary_config = uhgf_binary_config();
-uhgf_binary_config.ommu(2) = -5;
-uhgf_binary_config.ommu(3) = 4;
-uest = fitModel(usim.y, usim.u, uhgf_binary_config, unitsq_sgm_config, optim_config);
+c_uhgf_binary = uhgf_binary_config();
+c_uhgf_binary.ommu(2) = -5;
+c_uhgf_binary.ommu(3) = 4;
+uest = fitModel(usim.y, usim.u, c_uhgf_binary, unitsq_sgm_config, optim_config);
 uhgf_binary_plotTraj(uest)
 fit_plotCorr(uest)
 disp(uest.optim.Corr)

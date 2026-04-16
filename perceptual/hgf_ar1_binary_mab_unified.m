@@ -16,6 +16,18 @@ update_type = 'hgf';
 if isfield(r, 'c_prc') && isfield(r.c_prc, 'update_type')
     update_type = r.c_prc.update_type;
 end
+
+% Validate update type
+valid_update_types = {'hgf', 'ehgf', 'uhgf'};
+if isstring(update_type) && isscalar(update_type)
+    update_type = char(update_type);
+end
+if ~ischar(update_type) || ~ismember(update_type, valid_update_types)
+    error('tapas:hgf:InvalidUpdateType', ...
+        'Unknown update type ''%s''. Supported update types are: ''hgf'', ''ehgf'', ''uhgf''.', ...
+        update_type);
+end
+
 use_extended = ~strcmp(update_type, 'hgf');
 
 % Transform parameters back to their native space if needed
