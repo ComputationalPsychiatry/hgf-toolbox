@@ -63,6 +63,18 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
 
 ## Release notes
 
+### v8.1.1
+- **Bug fix** (`hgf_ar1_binary_mab_config_base`): eHGF and uHGF variants were
+  missing `rhomu`/`rhosa` priors, causing parameter vectors that were 3
+  elements too short and errors at fit/simulate time
+- **Robustness** (`hgf_ar1_binary_mab_unified`): Added explicit `update_type`
+  validation; unknown values now raise a clear error rather than silently
+  falling through to the eHGF branch
+- Fixed `hgf_demo` variable shadowing: renamed `uhgf_binary_config` to
+  `c_uhgf_binary` so the section can be re-run without error
+- Corrected header comments in five `*_config_base.m` files to reflect
+  uHGF support
+
 ### v8.1.0
 - **Unbounded HGF (uHGF)**: Introduced a third update variant alongside
   the classic HGF and eHGF. The uHGF uses a dual quadratic approximation

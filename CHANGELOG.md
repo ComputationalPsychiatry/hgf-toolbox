@@ -4,6 +4,27 @@ All notable changes to the HGF Toolbox are documented here.
 
 ---
 
+## [8.1.1] — 17 April 2026
+
+### Fixed
+- `hgf_ar1_binary_mab_config_base`: eHGF/uHGF variants were missing
+  `rhomu`/`rhosa` priors, producing parameter vectors 3 elements too
+  short and causing errors at fit/simulate time. Added rho priors and
+  corrected `expectedLength` to `7l-1` for extended update types.
+- `hgf_ar1_binary_mab_unified`: Added explicit `update_type` validation
+  with safe `mat2str` stringification of non-char values; unknown types
+  now raise `tapas:hgf:InvalidUpdateType` immediately rather than
+  silently falling through to the eHGF branch.
+- `hgf_demo`: Renamed `uhgf_binary_config` variable to `c_uhgf_binary`
+  to avoid shadowing the config function, which broke section re-runs.
+
+### Changed
+- Updated header comments in five `*_config_base.m` files from
+  "generates configs for both HGF and eHGF variants" to
+  "generates configs for HGF, eHGF, and uHGF variants".
+
+---
+
 ## [8.1.0] — 16 April 2026
 
 ### Added
