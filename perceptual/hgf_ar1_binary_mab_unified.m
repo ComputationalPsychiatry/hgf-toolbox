@@ -23,9 +23,14 @@ if isstring(update_type) && isscalar(update_type)
     update_type = char(update_type);
 end
 if ~ischar(update_type) || ~ismember(update_type, valid_update_types)
+    if ~ischar(update_type)
+        update_type_display = mat2str(update_type);
+    else
+        update_type_display = update_type;
+    end
     error('tapas:hgf:InvalidUpdateType', ...
         'Unknown update type ''%s''. Supported update types are: ''hgf'', ''ehgf'', ''uhgf''.', ...
-        update_type);
+        update_type_display);
 end
 
 use_extended = ~strcmp(update_type, 'hgf');
