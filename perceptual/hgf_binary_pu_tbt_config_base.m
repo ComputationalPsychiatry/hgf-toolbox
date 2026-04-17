@@ -1,6 +1,6 @@
 function c = hgf_binary_pu_tbt_config_base(update_type)
 % Base configuration for the HGF for binary inputs with trial-by-trial perceptual uncertainty.
-% This factory function generates configs for both HGF and eHGF variants.
+% This factory function generates configs for HGF, eHGF, and uHGF variants.
 %
 % Usage:
 %   c = hgf_binary_pu_tbt_config_base('hgf')   % classic HGF

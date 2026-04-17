@@ -1,6 +1,6 @@
 function c = hgf_jget_config_base(update_type)
 % Base configuration for the HGF for the jumping Gaussian estimation task (JGET).
-% This factory function generates configs for both HGF and eHGF variants.
+% This factory function generates configs for HGF, eHGF, and uHGF variants.
 %
 % Usage:
 %   c = hgf_jget_config_base('hgf')   % classic HGF
