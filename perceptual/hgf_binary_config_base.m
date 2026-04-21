@@ -109,7 +109,7 @@ switch update_type
         c.omsa = [NaN,   4,   4];
     case 'uhgf'
         c.ommu = [NaN,  -3,  -6];
-        c.omsa = [NaN,   4,   4];
+        c.omsa = [NaN, 4^2, 4^2];
 end
 
 % Gather prior settings in vectors

@@ -256,40 +256,38 @@ disp(eest.optim.Corr)
 %   r.c_prc.update_type = 'uhgf'  % unbounded HGF
 %
 %% 
-% The wrapper _uhgf_binary.m_ sets this flag automatically. The same extreme 
-% parameter values used above for the eHGF work equally well for the uHGF:
+% The wrapper _uhgf_binary.m_ sets this flag automatically. In parameter regions 
+% where the classic HGF works well, the uHGF produces closely matching results.
 
 usim = simModel(u,...
                      'uhgf_binary',...
-                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -4 3],...
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN -2.5 -6],...
                      'unitsq_sgm',...
                      5,...
                      123456789);
 uhgf_binary_plotTraj(usim)
 %%
-c_uhgf_binary = uhgf_binary_config();
-c_uhgf_binary.ommu(2) = -5;
-c_uhgf_binary.ommu(3) = 4;
-uest = fitModel(usim.y, usim.u, c_uhgf_binary, unitsq_sgm_config, optim_config);
+uest = fitModel(usim.y, usim.u, uhgf_binary_config, unitsq_sgm_config, optim_config);
 uhgf_binary_plotTraj(uest)
 fit_plotCorr(uest)
 disp(uest.optim.Corr)
 %% AR(1) models
 % With binary inputs, there is often a parameter region where trajectories exhibit 
-% wide swings and large jumps. With previous update derivations (_hgf_ and _ehgf_ 
-% in the code), this could in some cases be due to limitations in the quadratic 
-% approximation used to derive the updates. With _uhgf_, updates are guaranteed 
-% to be stable, so any remaining swings and jumps are due to the inherent logic 
-% of the model. In particular, when large evolution rates (high omegas) allows 
-% the second-level state estimate to stray far from zero, leading to outcome-level 
-% predictions very close to zero or one, then an outcome contrary to the predicted 
-% one leads to a very large prediction error and correspondingly large updates 
-% at the second and third level. Let's create such a situation by rerunning the 
-% previous simulation with a higher omega_2:
+% wide swings and large jumps. With previous update derivations (the classic and 
+% enhanced HGF, _hgf_ and _ehgf_ in the code, respectively), this could in some 
+% cases be due to limitations in the quadratic approximation used to derive the 
+% updates. With the _uHGF_, updates are guaranteed to be stable, so any remaining 
+% swings and jumps are due to the inherent logic of the model. In particular, 
+% when large evolution rates (high omegas) allow the second-level state estimate 
+% to stray far from zero, leading to outcome-level predictions very close to zero 
+% or one, then an outcome contrary to the predicted one leads to a very large 
+% prediction error and correspondingly large updates at the second and third level. 
+% Let's create such a situation by rerunning the previous simulation with a different 
+% omega_3:
 
 usim2 = simModel(u,...
                      'uhgf_binary',...
-                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1.5 NaN -3 3],...
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN -2.5 3],...
                      'unitsq_sgm',...
                      5,...
                      123456789);
@@ -307,7 +305,7 @@ uhgf_binary_plotTraj(usim2)
 
 usim3 = simModel(u,...
                      'uhgf_ar1_binary',...
-                     [NaN 0 1 NaN 1 1 NaN 0 0.3 NaN 0 1 NaN 0 0 1 1.5 NaN -3 3],...
+                     [NaN 0 1 NaN 1 1 NaN 0 0.3 NaN 0 1 NaN 0 0 1 1 NaN -2.5 3],...
                      'unitsq_sgm',...
                      5,...
                      123456789);
@@ -485,7 +483,7 @@ fit_plotResidualDiagnostics(est2)
 % filter inputs, and the residuals of the response model capture the performance 
 % of the combination of perceptual and response models. Looking at the same diagnostics 
 % for binary responses is less straightforward. The HGF Toolbox uses *Pearson 
-% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)}  
+% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)}   
 % \left(1-\hat{\mu}_1^{(k)}\right)  }}$
 
 fit_plotResidualDiagnostics(est)
