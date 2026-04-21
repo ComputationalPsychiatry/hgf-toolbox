@@ -80,7 +80,11 @@ elseif strcmp(update_type, 'uhgf')
 
     % Recompute v and w using muhat_j (predicted mean) instead of mu_prev_j
     v_jm1 = t_k * exp(ka_jm1 * muhat_j + om_jm1);
-    w_jm1 = v_jm1 / (1/pi_prev_jm1 + v_jm1);
+    if isinf(v_jm1)
+        w_jm1 = 1;
+    else
+        w_jm1 = 1 / (1 + 1/(pi_prev_jm1 * v_jm1));
+    end
 
     % -- Expansion 1: quadratic expansion at the prediction --
     pi1 = pihat_j + 1/2 * ka_jm1^2 * w_jm1 * (1 - w_jm1);
@@ -97,7 +101,9 @@ elseif strcmp(update_type, 'uhgf')
     gamma_c = log(t_k) + ka_jm1 * muhat_j + om_jm1;
     pihat_y = pihat_j / ka_jm1^2;
 
-    W_arg  = be_aux / (2 * pihat_y) * exp(0.5/pihat_y - gamma_c);
+    % Compute W_arg in log-space to avoid overflow in extreme parameter regimes
+    log_W_arg = log(be_aux) - log(2 * pihat_y) + 0.5/pihat_y - gamma_c;
+    W_arg  = exp(min(log_W_arg, log(realmax('double'))));
     v_W    = lambert_w0(W_arg);
     y_star = gamma_c + v_W - 0.5/pihat_y;
 
@@ -105,14 +111,25 @@ elseif strcmp(update_type, 'uhgf')
     x_star = (y_star - log(t_k) - om_jm1) / ka_jm1;
 
     % Evaluate quadratic expansion at x_star
-    s2   = t_k * exp(ka_jm1 * x_star + om_jm1);
-    w2   = s2 / (al_aux + s2);
-    da2  = be_aux / (al_aux + s2) - 1;
+    s2 = t_k * exp(ka_jm1 * x_star + om_jm1);
+    if isinf(s2)
+        w2  = 1;
+        da2 = -1;
+    else
+        w2  = 1 / (1 + al_aux / s2);
+        da2 = be_aux / (al_aux + s2) - 1;
+    end
     pi2  = pihat_j + 1/2 * ka_jm1^2 * w2 * (w2 + (2*w2 - 1) * da2);
     if pi2 <= 0
         pi2 = pihat_j + 1/2 * ka_jm1^2 * w2 * (1 - w2);
     end
     mu2 = x_star + (1/2 * ka_jm1 * w2 * da2 - pihat_j * (x_star - muhat_j)) / pi2;
+
+    % Fall back to Expansion 1 if Expansion 2 yields non-finite results
+    if ~isfinite(pi2) || ~isfinite(mu2)
+        pi2 = pi1;
+        mu2 = mu1;
+    end
 
     % -- Softmax blend weight based on variational energy I --
     ey1 = t_k * exp(ka_jm1 * mu1 + om_jm1);
