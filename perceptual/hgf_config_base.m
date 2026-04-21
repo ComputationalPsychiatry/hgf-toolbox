@@ -99,14 +99,8 @@ c.irregular_intervals = false;
 % For all but the first level, this is usually best
 % kept fixed to 1 (determines origin on x_i-scale).
 % NOTE: Prior values differ for the uHGF variant.
-switch update_type
-    case 'uhgf'
-        c.mu_0mu = [99991, 0];
-        c.mu_0sa = [99992, 2];
-    otherwise
-        c.mu_0mu = [99991, 1];
-        c.mu_0sa = [99992, 0];
-end
+c.mu_0mu = [99991, 1];
+c.mu_0sa = [99992, 0];
 
 c.logsa_0mu = [99993, log(0.1)];
 c.logsa_0sa = [    1,        1];
@@ -127,28 +121,16 @@ c.logkasa = [     0];
 % Omegas
 % Format: row vector of length n_levels
 % NOTE: Prior values differ for the uHGF variant.
-switch update_type
-    case 'uhgf'
-        c.ommu = [99993, -8];
-        c.omsa = [ 4^2, 4^2];
-    otherwise
-        c.ommu = [99993,  -4];
-        c.omsa = [  4^2, 4^2];
-end
+c.ommu = [99993,  -4];
+c.omsa = [  4^2, 4^2];
 
 % Pi_u
 % Format: scalar
 % Fix this to Inf (no percpeptual uncertainty) by setting
 % logpiumu = Inf; logpiusa = 0;
 % NOTE: Prior values differ for the uHGF variant.
-switch update_type
-    case 'uhgf'
-        c.logpiumu = -log(0.0001);
-        c.logpiusa = 0;
-    otherwise
-        c.logpiumu = -99993;
-        c.logpiusa = 2^2;
-end
+c.logpiumu = -99993;
+c.logpiusa = 2^2;
 
 % Gather prior settings in vectors
 c.priormus = [

@@ -243,12 +243,15 @@ ehgf_binary_plotTraj(eest)
 fit_plotCorr(eest)
 disp(eest.optim.Corr)
 %% Unbounded HGF (binary inputs)
-% The unbounded HGF (uHGF) is a third variant, based on a dual quadratic approximation 
-% with sigmoid-based interpolation at volatility levels. Like the eHGF, it handles 
-% parameter regions where the classic HGF fails; unlike the eHGF it makes no distributional 
-% assumptions on the sign of the precision update, so the posterior precision 
-% is unconstrained from below. Here we apply all three variants to the same binary 
-% input sequence so their belief trajectories can be compared directly.
+% The unbounded HGF (uHGF) is a third variant that uses a two-expansion posterior 
+% approximation at volatility levels: one expansion at the prediction (prior mean) 
+% and one at the approximate posterior mode found via the Lambert W function. 
+% The two Gaussians are blended by a variational-energy softmax weight and moment-matched 
+% to a single Gaussian, so the posterior precision is always positive and the 
+% approximation is principled throughout the parameter space. Like the eHGF, it 
+% handles parameter regions where the classic HGF fails. Here we apply all three 
+% variants to the same binary input sequence so their belief trajectories can 
+% be compared directly.
 % 
 % The flag that selects the variant is:
 %%
@@ -483,7 +486,7 @@ fit_plotResidualDiagnostics(est2)
 % filter inputs, and the residuals of the response model capture the performance 
 % of the combination of perceptual and response models. Looking at the same diagnostics 
 % for binary responses is less straightforward. The HGF Toolbox uses *Pearson 
-% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)}   
+% residuals* in this case, defined as $r^{(k)} =\frac{y^{(k)} - \hat{\mu}_1^{(k)}}{\sqrt{\hat{\mu}_1^{(k)}    
 % \left(1-\hat{\mu}_1^{(k)}\right)  }}$
 
 fit_plotResidualDiagnostics(est)
