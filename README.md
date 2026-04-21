@@ -63,6 +63,22 @@ est_e = fitModel(sim.y, u, 'ehgf_binary_config', 'unitsq_sgm_config', 'quasinewt
 
 ## Release notes
 
+### v8.2.0
+- **Improved uHGF posterior approximation** (`hgf_volatility_update.m`):
+  Replaced the previous heuristic dual-expansion scheme with a
+  principled two-expansion approach based on Lambert W mode-finding
+  and Gaussian mixture moment matching. Expansion 1 remains the
+  quadratic approximation at the prediction; Expansion 2 is the
+  quadratic approximation at the approximate posterior mode, located
+  analytically via the Lambert W₀ function. The two Gaussians are
+  blended via a variational-energy softmax weight and moment-matched
+  to a single Gaussian. The update is fully numerically stable across
+  all parameter regimes.
+- **New utility** `utilities/lambert_w0.m`: Principal branch of the
+  Lambert W function (W₀), used by the uHGF update.
+- Updated uHGF demo sections and corrected uHGF omega prior variance
+  in `hgf_binary_config_base`.
+
 ### v8.1.1
 - **Bug fix** (`hgf_ar1_binary_mab_config_base`): eHGF and uHGF variants were
   missing `rhomu`/`rhosa` priors, causing parameter vectors that were 3

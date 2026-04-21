@@ -4,6 +4,37 @@ All notable changes to the HGF Toolbox are documented here.
 
 ---
 
+## [8.2.0] — 21 April 2026
+
+### Changed
+- **uHGF volatility update** (`hgf_volatility_update.m`): Replaced the
+  previous dual quadratic approximation (heuristic sigmoid-interpolation
+  weight) with a principled two-expansion scheme based on Lambert W
+  mode-finding and Gaussian mixture moment matching.
+  - *Expansion 1*: quadratic approximation at the prediction (prior mean).
+  - *Expansion 2*: quadratic approximation at the approximate posterior
+    mode, located analytically via the Lambert W₀ function (solving the
+    mode equation exactly in the limit α → 0).
+  - The two Gaussians are blended via a softmax weight derived from the
+    variational energy *I*. The final posterior is the moment-matched
+    Gaussian of the resulting mixture. Posterior precision is always
+    positive.
+  - Numerically stable throughout: `v_jm1` and `w2`/`da2` are guarded
+    against Inf/Inf → NaN via stable reformulations and `isinf` checks;
+    the Lambert W argument is computed in log-space to prevent `exp()`
+    overflow; Expansion 2 falls back to Expansion 1 if any intermediate
+    result is non-finite.
+- **`hgf_demo.m` / `hgf_demo.mlx`**: Updated uHGF sections to reflect
+  the improved posterior approximation.
+- **`hgf_binary_config_base`**: Corrected uHGF omega prior variance.
+
+### Added
+- `utilities/lambert_w0.m`: New utility implementing the principal branch
+  of the Lambert W function (W₀) using an asymptotic initial guess
+  followed by Halley's method (correct second-derivative form).
+
+---
+
 ## [8.1.1] — 17 April 2026
 
 ### Fixed
