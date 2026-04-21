@@ -64,46 +64,71 @@ elseif strcmp(update_type, 'ehgf')
     pi_j = pihat_j + max(0, 1/2 * ka_jm1^2 * ww * (ww + rr * dd));
 
 elseif strcmp(update_type, 'uhgf')
-    % Unbounded HGF: Dual quadratic approximation with interpolation.
-    % Uses muhat_j (predicted mean including drift) for the weighting factor.
+    % Unbounded HGF: Dual quadratic approximation with Lambert W mode-finding
+    % and Gaussian mixture moment matching.
+    %
+    % Expansion 1 is the quadratic expansion at the prediction (prior mean).
+    % Expansion 2 is the quadratic expansion at the approximate posterior mode
+    % obtained via the Lambert W_0 function, which solves the mode equation
+    % exactly in the limit alpha -> 0.
+    %
+    % The two Gaussians are blended via a softmax weight based on the
+    % variational energy I, and the final posterior is the moment-matched
+    % Gaussian of the resulting two-component mixture.
+    %
+    % Posterior precision is always positive.
 
-    % Recompute v and w using muhat_j instead of mu_prev_j
+    % Recompute v and w using muhat_j (predicted mean) instead of mu_prev_j
     v_jm1 = t_k * exp(ka_jm1 * muhat_j + om_jm1);
     w_jm1 = v_jm1 / (1/pi_prev_jm1 + v_jm1);
 
-    % First quadratic approximation L1 (at the prediction)
+    % -- Expansion 1: quadratic expansion at the prediction --
     pi1 = pihat_j + 1/2 * ka_jm1^2 * w_jm1 * (1 - w_jm1);
     mu1 = muhat_j + 1/2 * 1/pi1 * ka_jm1 * w_jm1 * da_jm1;
 
-    % Auxiliary parameters for second approximation
-    al_aux = 1/pi_prev_jm1;                              % sigma_dagger^0
-    be_aux = 1/pi_jm1 + (mu_jm1 - muhat_jm1)^2;         % total posterior uncertainty
+    % -- Auxiliary quantities --
+    al_aux = 1/pi_prev_jm1;                                % sigma_dagger^0
+    be_aux = 1/pi_jm1 + (mu_jm1 - muhat_jm1)^2;           % total posterior uncertainty
 
-    % Second quadratic approximation L2 (at alternative expansion point phi)
-    %
-    % The canonical expansion point phi_canon = log(al_aux*(2+sqrt(3)))
-    % lives in the canonical exponent space y = log(t_k) + kappa*x + omega.
-    % The native-space expansion point is:
-    phi_canon  = log(al_aux * (2 + sqrt(3)));
-    phi_full   = (phi_canon - log(t_k) - om_jm1) / ka_jm1;
+    % -- Expansion 2: quadratic expansion at the Lambert W_0 approximate mode --
+    % In canonical variable y = log(t) + kappa*x + omega, the mode equation
+    % (with alpha -> 0) reduces to v*exp(v) = beta/(2*pihat_y)*exp(1/(2*pihat_y) - gamma_c)
+    % where gamma_c = log(t) + kappa*muhat + omega and pihat_y = pihat/kappa^2.
+    gamma_c = log(t_k) + ka_jm1 * muhat_j + om_jm1;
+    pihat_y = pihat_j / ka_jm1^2;
 
-    % At phi_full, t_k*exp(kappa*phi_full + omega) = al_aux*(2+sqrt(3))
-    % by construction. Use this directly to avoid numerical issues.
-    exp_at_phi = al_aux * (2 + sqrt(3));
-    w2  = exp_at_phi / (al_aux + exp_at_phi);         % = (2+sqrt(3))/(3+sqrt(3))
-    da2 = be_aux / (al_aux + exp_at_phi) - 1;
+    W_arg  = be_aux / (2 * pihat_y) * exp(0.5/pihat_y - gamma_c);
+    v_W    = lambert_w0(W_arg);
+    y_star = gamma_c + v_W - 0.5/pihat_y;
 
-    pi2    = pihat_j + 1/2 * ka_jm1^2 * w2 * (w2 + (2 * w2 - 1) * da2);
-    muhat2 = ((pi2 - pihat_j) * phi_full + pihat_j * muhat_j) / pi2;
-    mu2    = muhat2 + 1/2 * 1/pi2 * ka_jm1 * w2 * da2;
+    % Convert back to native x
+    x_star = (y_star - log(t_k) - om_jm1) / ka_jm1;
 
-    % Sigmoid blending in canonical exponent space y = log(t_k) + kappa*muhat + omega
-    y_pred  = log(t_k) + ka_jm1 * muhat_j + om_jm1;
-    theta_l = -sqrt(1.2 * 2 * be_aux / al_aux);
-    b = 1/(1 + exp(-8 * (y_pred - theta_l))) * (1 - 1/(1 + exp(-y_pred)));
+    % Evaluate quadratic expansion at x_star
+    s2   = t_k * exp(ka_jm1 * x_star + om_jm1);
+    w2   = s2 / (al_aux + s2);
+    da2  = be_aux / (al_aux + s2) - 1;
+    pi2  = pihat_j + 1/2 * ka_jm1^2 * w2 * (w2 + (2*w2 - 1) * da2);
+    if pi2 <= 0
+        pi2 = pihat_j + 1/2 * ka_jm1^2 * w2 * (1 - w2);
+    end
+    mu2 = x_star + (1/2 * ka_jm1 * w2 * da2 - pihat_j * (x_star - muhat_j)) / pi2;
 
-    pi_j = (1 - b) * pi1 + b * pi2;
+    % -- Softmax blend weight based on variational energy I --
+    ey1 = t_k * exp(ka_jm1 * mu1 + om_jm1);
+    I1  = -1/2 * log(al_aux + ey1) - 1/2 * be_aux / (al_aux + ey1) ...
+           - 1/2 * pihat_j * (mu1 - muhat_j)^2;
+
+    ey2 = t_k * exp(ka_jm1 * mu2 + om_jm1);
+    I2  = -1/2 * log(al_aux + ey2) - 1/2 * be_aux / (al_aux + ey2) ...
+           - 1/2 * pihat_j * (mu2 - muhat_j)^2;
+
+    b = 1 / (1 + exp(I1 - I2));   % higher I -> higher weight
+
+    % -- Gaussian mixture moment matching --
     mu_j = (1 - b) * mu1 + b * mu2;
+    sig2 = (1 - b) / pi1 + b / pi2 + b * (1 - b) * (mu1 - mu2)^2;
+    pi_j = 1 / sig2;
 
 else
     error('tapas:hgf:UnknownUpdateType', ...
