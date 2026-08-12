@@ -58,6 +58,12 @@ c.logitphisa = [NaN, 0, 2];
 c.mmu = [NaN, c.mu_0mu(2), c.mu_0mu(3)];
 c.msa = [NaN,           0,           1];
 
+% Rhos (only in eHGF/uHGF)
+if any(strcmp(update_type, {'uhgf', 'ehgf'}))
+    c.rhomu = [NaN, 0, 0];
+    c.rhosa = [NaN, 0, 0];
+end
+
 % Kappas
 c.logkamu = [log(1), log(1)];
 c.logkasa = [     0,      0];
@@ -98,10 +104,6 @@ switch update_type
         expectedLength = 5*c.n_levels+(c.n_levels-1);
 
     case {'ehgf', 'uhgf'}
-        % Rhos (only in eHGF/uHGF)
-        c.rhomu = [NaN, 0, 0];
-        c.rhosa = [NaN, 0, 0];
-
         c.priormus = [
             c.mu_0mu,...
             c.logsa_0mu,...
