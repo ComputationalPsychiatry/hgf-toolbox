@@ -90,16 +90,18 @@ for k = 2:1:n
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
 
+        % Predicted means of all levels (no drift: the previous posterior means)
+        muxhat(k,:) = mux(k-1,:);
+        muahat(k,:) = mua(k-1,:);
+
         % Input level
-        muuhat(k) = mux(k-1,1);
-        piuhat(k) = 1/exp(kau * mua(k-1,1) + omu);
+        muuhat(k) = muxhat(k,1);
+        piuhat(k) = 1/exp(kau * muahat(k,1) + omu);
         daux(k) = u(k) - muuhat(k);
 
         % 1st level
-        muxhat(k,1) = mux(k-1,1);
-        muahat(k,1) = mua(k-1,1);
-        pixhat(k,1) = hgf_pihat(pix(k-1,1), t(k), kax(1), mux(k-1,2), omx(1));
-        piahat(k,1) = hgf_pihat(pia(k-1,1), t(k), kaa(1), mua(k-1,2), oma(1));
+        pixhat(k,1) = hgf_pihat(pix(k-1,1), t(k), kax(1), muxhat(k,2), omx(1));
+        piahat(k,1) = hgf_pihat(pia(k-1,1), t(k), kaa(1), muahat(k,2), oma(1));
 
         % x-updates
         pix(k,1) = pixhat(k,1) + piuhat(k);
@@ -119,23 +121,21 @@ for k = 2:1:n
         if l > 2
             % Pass through higher levels
             for j = 2:l-1
-                muxhat(k,j) = mux(k-1,j);
-                muahat(k,j) = mua(k-1,j);
-                pixhat(k,j) = hgf_pihat(pix(k-1,j), t(k), kax(j), mux(k-1,j+1), omx(j));
-                piahat(k,j) = hgf_pihat(pia(k-1,j), t(k), kaa(j), mua(k-1,j+1), oma(j));
+                pixhat(k,j) = hgf_pihat(pix(k-1,j), t(k), kax(j), muxhat(k,j+1), omx(j));
+                piahat(k,j) = hgf_pihat(pia(k-1,j), t(k), kaa(j), muahat(k,j+1), oma(j));
 
                 % x-hierarchy update
                 [pix(k,j), mux(k,j), wx(k,j-1), ~] = hgf_volatility_update(...
                     muxhat(k,j), pixhat(k,j), ...
                     kax(j-1), pixhat(k,j-1), dax(k,j-1), ...
-                    mux(k-1,j), omx(j-1), pix(k-1,j-1), ...
+                    omx(j-1), pix(k-1,j-1), ...
                     pix(k,j-1), mux(k,j-1), muxhat(k,j-1), t(k), update_type);
 
                 % a-hierarchy update
                 [pia(k,j), mua(k,j), wa(k,j-1), ~] = hgf_volatility_update(...
                     muahat(k,j), piahat(k,j), ...
                     kaa(j-1), piahat(k,j-1), daa(k,j-1), ...
-                    mua(k-1,j), oma(j-1), pia(k-1,j-1), ...
+                    oma(j-1), pia(k-1,j-1), ...
                     pia(k,j-1), mua(k,j-1), muahat(k,j-1), t(k), update_type);
 
                 dax(k,j) = hgf_volatility_pe(pix(k,j), mux(k,j), muxhat(k,j), pixhat(k,j));
@@ -144,21 +144,19 @@ for k = 2:1:n
         end
 
         % Last level
-        muxhat(k,l) = mux(k-1,l);
-        muahat(k,l) = mua(k-1,l);
         pixhat(k,l) = hgf_pihat_last(pix(k-1,l), t(k), thx);
         piahat(k,l) = hgf_pihat_last(pia(k-1,l), t(k), tha);
 
         [pix(k,l), mux(k,l), wx(k,l-1), ~] = hgf_volatility_update(...
             muxhat(k,l), pixhat(k,l), ...
             kax(l-1), pixhat(k,l-1), dax(k,l-1), ...
-            mux(k-1,l), omx(l-1), pix(k-1,l-1), ...
+            omx(l-1), pix(k-1,l-1), ...
             pix(k,l-1), mux(k,l-1), muxhat(k,l-1), t(k), update_type);
 
         [pia(k,l), mua(k,l), wa(k,l-1), ~] = hgf_volatility_update(...
             muahat(k,l), piahat(k,l), ...
             kaa(l-1), piahat(k,l-1), daa(k,l-1), ...
-            mua(k-1,l), oma(l-1), pia(k-1,l-1), ...
+            oma(l-1), pia(k-1,l-1), ...
             pia(k,l-1), mua(k,l-1), muahat(k,l-1), t(k), update_type);
 
         dax(k,l) = hgf_volatility_pe(pix(k,l), mux(k,l), muxhat(k,l), pixhat(k,l));

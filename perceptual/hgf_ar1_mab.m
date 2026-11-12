@@ -91,13 +91,18 @@ for k = 2:1:n
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
         
+        % Predictions of all levels
+        % ~~~~~~~~~~~~~~~~~~~~~~~~~
+        % The step size of each level depends on the value of the level above
+        % at trial k, so the predictions of all levels come first.
+        for j = 1:l
+            muhat(k,j,:) = mu(k-1,j,:) +t(k) *phi(j) *(m(j) -mu(k-1,j,:));
+        end
+
         % 1st level
         % ~~~~~~~~~
-        % Prediction
-        muhat(k,1,:) = mu(k-1,1,:) +t(k) *phi(1) *(m(1) -mu(k-1,1,:));
-        
         % Precision of prediction
-        pihat(k,1,:) = 1/(1/pi(k-1,1,:) +t(k) *exp(ka(1) *mu(k-1,2,:) +om(1)));
+        pihat(k,1,:) = 1/(1/pi(k-1,1,:) +t(k) *exp(ka(1) *muhat(k,2,:) +om(1)));
         
         % Input prediction error
         dau(k) = u(k) -muhat(k,1,y(k));
@@ -116,14 +121,11 @@ for k = 2:1:n
             % Pass through higher levels
             % ~~~~~~~~~~~~~~~~~~~~~~~~~~
             for j = 2:l-1
-                % Prediction
-                muhat(k,j,:) = mu(k-1,j,:) +t(k) *phi(j) *(m(j) -mu(k-1,j,:));
-                
                 % Precision of prediction
-                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *mu(k-1,j+1,:) +om(j)));
+                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *muhat(k,j+1,:) +om(j)));
 
                 % Weighting factor
-                v(k,j-1) = t(k) *exp(ka(j-1) *mu(k-1,j,y(k)) +om(j-1));
+                v(k,j-1) = t(k) *exp(ka(j-1) *muhat(k,j,y(k)) +om(j-1));
                 w(k,j-1) = v(k,j-1) *pihat(k,j-1,y(k));
 
                 % Updates
@@ -142,15 +144,12 @@ for k = 2:1:n
 
         % Last level
         % ~~~~~~~~~~
-        % Prediction
-        muhat(k,l,:) = mu(k-1,l,:) +t(k) *phi(l) *(m(l) -mu(k-1,l,:));
-        
         % Precision of prediction
         pihat(k,l,:) = 1/(1/pi(k-1,l,:) +t(k) *th);
 
         % Weighting factor
         v(k,l)   = t(k) *th;
-        v(k,l-1) = t(k) *exp(ka(l-1) *mu(k-1,l,y(k)) +om(l-1));
+        v(k,l-1) = t(k) *exp(ka(l-1) *muhat(k,l,y(k)) +om(l-1));
         w(k,l-1) = v(k,l-1) *pihat(k,l-1,y(k));
         
         % Updates
