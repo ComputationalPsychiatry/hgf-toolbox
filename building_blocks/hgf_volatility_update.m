@@ -1,5 +1,5 @@
 function [pi_j, mu_j, v_jm1, w_jm1] = hgf_volatility_update(muhat_j, pihat_j, ...
-    ka_jm1, pihat_jm1, da_jm1, mu_prev_j, om_jm1, pi_prev_jm1, ...
+    ka_jm1, pihat_jm1, da_jm1, om_jm1, pi_prev_jm1, ...
     pi_jm1, mu_jm1, muhat_jm1, t_k, update_type)
 % Computes the posterior precision and mean update at a volatility level of the HGF.
 %
@@ -8,9 +8,15 @@ function [pi_j, mu_j, v_jm1, w_jm1] = hgf_volatility_update(muhat_j, pihat_j, ..
 % continuous models, j >= 3 in binary models), the precision update differs between
 % the three variants.
 %
+% The variance of the random walk at level j-1, v_jm1, is evaluated at the
+% predicted mean of level j for trial k (muhat_j), as in the prediction of
+% level j-1 (hgf_pihat), so that w_jm1 = v_jm1 * pihat_jm1 is the weighting
+% factor of that prediction. The expansions of all three variants are taken at
+% the same point.
+%
 % USAGE:
 %   [pi_j, mu_j, v_jm1, w_jm1] = hgf_volatility_update(muhat_j, pihat_j, ...
-%       ka_jm1, pihat_jm1, da_jm1, mu_prev_j, om_jm1, pi_prev_jm1, ...
+%       ka_jm1, pihat_jm1, da_jm1, om_jm1, pi_prev_jm1, ...
 %       pi_jm1, mu_jm1, muhat_jm1, t_k, update_type)
 %
 % INPUT:
@@ -19,7 +25,6 @@ function [pi_j, mu_j, v_jm1, w_jm1] = hgf_volatility_update(muhat_j, pihat_j, ..
 %   ka_jm1        Coupling strength from level j to level j-1
 %   pihat_jm1     Predicted precision at level j-1
 %   da_jm1        Volatility prediction error at level j-1
-%   mu_prev_j     Previous posterior mean at level j (from trial k-1)
 %   om_jm1        Log-volatility offset at level j-1
 %   pi_prev_jm1   Previous posterior precision at level j-1 (from trial k-1)
 %   pi_jm1        Current posterior precision at level j-1 (from trial k)
@@ -34,8 +39,8 @@ function [pi_j, mu_j, v_jm1, w_jm1] = hgf_volatility_update(muhat_j, pihat_j, ..
 %   v_jm1         Variance of the random walk at level j-1
 %   w_jm1         Weighting factor at level j-1
 
-% Weighting factor (same for both variants)
-v_jm1 = t_k * exp(ka_jm1 * mu_prev_j + om_jm1);
+% Weighting factor (same for all variants), at the predicted mean of level j
+v_jm1 = t_k * exp(ka_jm1 * muhat_j + om_jm1);
 w_jm1 = v_jm1 * pihat_jm1;
 
 if strcmp(update_type, 'hgf')
@@ -78,8 +83,8 @@ elseif strcmp(update_type, 'uhgf')
     %
     % Posterior precision is always positive.
 
-    % Recompute v and w using muhat_j (predicted mean) instead of mu_prev_j
-    v_jm1 = t_k * exp(ka_jm1 * muhat_j + om_jm1);
+    % Recompute w from v and the previous precision of level j-1, which is
+    % v * pihat_jm1 written so that it stays finite when v overflows
     if isinf(v_jm1)
         w_jm1 = 1;
     else

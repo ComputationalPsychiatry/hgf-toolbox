@@ -108,8 +108,12 @@ for k = 2:1:n
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
         
-        % 2nd level prediction
-        muhat(k,2,:) = mu(k-1,2,:) +t(k) *rho(2);
+        % Predictions of levels 2 to l
+        % (the step size of each level depends on the value of the level
+        % above at trial k, so these predictions come first)
+        for j = 2:l
+            muhat(k,j,:) = mu(k-1,j,:) +t(k) *rho(j);
+        end
         
         % 1st level
         % ~~~~~~~~~
@@ -134,7 +138,7 @@ for k = 2:1:n
         % Prediction: see above
         
         % Precision of prediction
-        pihat(k,2,:) = 1/(1/pi(k-1,2,:) +exp(ka(2) *mu(k-1,3,:) +om(2)));
+        pihat(k,2,:) = 1/(1/pi(k-1,2,:) +exp(ka(2) *muhat(k,3,:) +om(2)));
 
         % Updates
         pi(k,2,:) = pihat(k,2,:);
@@ -150,14 +154,11 @@ for k = 2:1:n
             % Pass through higher levels
             % ~~~~~~~~~~~~~~~~~~~~~~~~~~
             for j = 3:l-1
-                % Prediction
-                muhat(k,j,:) = mu(k-1,j,:) +t(k) *rho(j);
-                
                 % Precision of prediction
-                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *mu(k-1,j+1,:) +om(j)));
+                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *muhat(k,j+1,:) +om(j)));
 
                 % Weighting factor
-                v(k,j-1) = t(k) *exp(ka(j-1) *mu(k-1,j,y(k)) +om(j-1));
+                v(k,j-1) = t(k) *exp(ka(j-1) *muhat(k,j,y(k)) +om(j-1));
                 w(k,j-1) = v(k,j-1) *pihat(k,j-1,y(k));
 
                 % Updates
@@ -176,15 +177,12 @@ for k = 2:1:n
 
         % Last level
         % ~~~~~~~~~~
-        % Prediction
-        muhat(k,l,:) = mu(k-1,l,:) +t(k) *rho(l);
-        
         % Precision of prediction
         pihat(k,l,:) = 1/(1/pi(k-1,l,:) +t(k) *th);
 
         % Weighting factor
         v(k,l)   = t(k) *th;
-        v(k,l-1) = t(k) *exp(ka(l-1) *mu(k-1,l,y(k)) +om(l-1));
+        v(k,l-1) = t(k) *exp(ka(l-1) *muhat(k,l,y(k)) +om(l-1));
         w(k,l-1) = v(k,l-1) *pihat(k,l-1,y(k));
         
         % Updates

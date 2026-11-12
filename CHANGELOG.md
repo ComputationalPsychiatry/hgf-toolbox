@@ -4,6 +4,31 @@ All notable changes to the HGF Toolbox are documented here.
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Step size evaluated at the prediction of the level above.** The
+  predicted precision of a level and the weighting factor `v` of its
+  volatility update now use the predicted mean of the level above for the
+  current trial (`muhat(k,j+1)`), which includes its drift `rho` and its
+  mean reversion `phi`, instead of that level's posterior mean from the
+  previous trial (`mu(k-1,j+1)`). The two are identical when the level above
+  has no drift and no mean reversion, so models with the default `rho = 0`
+  at volatility levels are unchanged. The AR(1) models (`hgf_ar1`,
+  `hgf_ar1_mab`, `hgf_ar1_binary_unified`, `hgf_ar1_binary_mab_unified`,
+  `hgf_whichworld`) and any model with a nonzero `rho` above the first
+  level change.
+  - All levels are now predicted at the start of each trial, before any
+    predicted precision.
+  - `hgf_pihat.m` takes the predicted mean of the level above
+    (`muhat_jplus1`).
+  - `hgf_volatility_update.m` no longer takes the previous posterior mean
+    (`mu_prev_j`). It computes `v_jm1` from `muhat_j` for all three update
+    types, so the uHGF no longer evaluates `v` at a different point from the
+    standard HGF and the eHGF.
+
+---
+
 ## [8.2.0] — 21 April 2026
 
 ### Changed

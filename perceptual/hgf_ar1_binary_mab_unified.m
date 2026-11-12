@@ -147,8 +147,12 @@ for k = 2:1:n
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
         
-        % 2nd level prediction
-        muhat(k,2,:) = mu(k-1,2,:) +t(k) *rho(2) +t(k) *phi(2) *(m(2) -mu(k-1,2,:));
+        % Predicted means of levels 2 to l
+        % (the step size of each level depends on the value of the level
+        % above at trial k, so these predictions come first)
+        for j = 2:l
+            muhat(k,j,:) = mu(k-1,j,:) +t(k) *rho(j) +t(k) *phi(j) *(m(j) -mu(k-1,j,:));
+        end
         
         % 1st level
         % ~~~~~~~~~
@@ -171,7 +175,7 @@ for k = 2:1:n
         % 2nd level
         % ~~~~~~~~~
         % Precision of prediction
-        pihat(k,2,:) = 1/(1/pi(k-1,2,:) +exp(ka(2) *mu(k-1,3,:) +om(2)));
+        pihat(k,2,:) = 1/(1/pi(k-1,2,:) +exp(ka(2) *muhat(k,3,:) +om(2)));
 
         % Updates
         pi(k,2,:) = pihat(k,2,:) +ka(1)^2/pihat(k,1,:);
@@ -186,14 +190,11 @@ for k = 2:1:n
             % Pass through higher levels
             % ~~~~~~~~~~~~~~~~~~~~~~~~~~
             for j = 3:l-1
-                % Prediction
-                muhat(k,j,:) = mu(k-1,j,:) +t(k) *rho(j) +t(k) *phi(j) *(m(j) -mu(k-1,j));
-                
                 % Precision of prediction
-                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *mu(k-1,j+1,:) +om(j)));
+                pihat(k,j,:) = 1/(1/pi(k-1,j,:) +t(k) *exp(ka(j) *muhat(k,j+1,:) +om(j)));
 
-                % Weighting factor (hgf/ehgf use this; uhgf recomputes inside hgf_volatility_update)
-                v(k,j-1) = t(k) *exp(ka(j-1) *mu(k-1,j,y(k)) +om(j-1));
+                % Weighting factor, at the predicted mean of the level above
+                v(k,j-1) = t(k) *exp(ka(j-1) *muhat(k,j,y(k)) +om(j-1));
                 w(k,j-1) = v(k,j-1) *pihat(k,j-1,y(k));
 
                 if strcmp(update_type, 'uhgf')
@@ -201,7 +202,7 @@ for k = 2:1:n
                     [pi_j, mu_j, v(k,j-1), w(k,j-1)] = hgf_volatility_update(...
                         muhat(k,j,y(k)), pihat(k,j,y(k)), ...
                         ka(j-1), pihat(k,j-1,y(k)), da(k,j-1), ...
-                        mu(k-1,j,y(k)), om(j-1), pi(k-1,j-1,y(k)), ...
+                        om(j-1), pi(k-1,j-1,y(k)), ...
                         pi(k,j-1,y(k)), mu(k,j-1,y(k)), muhat(k,j-1,y(k)), t(k), update_type);
                     mu(k,j,:) = muhat(k,j,:) + (mu_j - muhat(k,j,y(k)));
                     pi(k,j,:) = pihat(k,j,:) + (pi_j - pihat(k,j,y(k)));
@@ -236,15 +237,12 @@ for k = 2:1:n
 
         % Last level
         % ~~~~~~~~~~
-        % Prediction
-        muhat(k,l,:) = mu(k-1,l,:) +t(k) *rho(l) +t(k) *phi(l) *(m(l) -mu(k-1,l));
-        
         % Precision of prediction
         pihat(k,l,:) = 1/(1/pi(k-1,l,:) +t(k) *th);
 
-        % Weighting factor (hgf/ehgf use this; uhgf recomputes inside hgf_volatility_update)
+        % Weighting factor, at the predicted mean of the level above
         v(k,l)   = t(k) *th;
-        v(k,l-1) = t(k) *exp(ka(l-1) *mu(k-1,l,y(k)) +om(l-1));
+        v(k,l-1) = t(k) *exp(ka(l-1) *muhat(k,l,y(k)) +om(l-1));
         w(k,l-1) = v(k,l-1) *pihat(k,l-1,y(k));
 
         if strcmp(update_type, 'uhgf')
@@ -252,7 +250,7 @@ for k = 2:1:n
             [pi_l, mu_l, v(k,l-1), w(k,l-1)] = hgf_volatility_update(...
                 muhat(k,l,y(k)), pihat(k,l,y(k)), ...
                 ka(l-1), pihat(k,l-1,y(k)), da(k,l-1), ...
-                mu(k-1,l,y(k)), om(l-1), pi(k-1,l-1,y(k)), ...
+                om(l-1), pi(k-1,l-1,y(k)), ...
                 pi(k,l-1,y(k)), mu(k,l-1,y(k)), muhat(k,l-1,y(k)), t(k), update_type);
             mu(k,l,:) = muhat(k,l,:) + (mu_l - muhat(k,l,y(k)));
             pi(k,l,:) = pihat(k,l,:) + (pi_l - pihat(k,l,y(k)));

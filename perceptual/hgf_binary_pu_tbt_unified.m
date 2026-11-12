@@ -79,15 +79,19 @@ for k = 2:1:n
         % Effect of input u(k)
         %%%%%%%%%%%%%%%%%%%%%%
 
-        % 2nd level prediction
-        muhat(k,2) = hgf_prediction(mu(k-1,2), t(k), 'rho', rho(2));
+        % Predicted means of levels 2 to l
+        % (the step size of each level depends on the value of the level
+        % above at trial k, so these predictions come first)
+        for j = 2:l
+            muhat(k,j) = hgf_prediction(mu(k-1,j), t(k), 'rho', rho(j));
+        end
 
         % 1st level (with trial-by-trial perceptual uncertainty)
         [mu(k,1), pi(k,1), muhat(k,1), pihat(k,1), da(k,1)] = ...
             hgf_binary_level1(u(k), ka(1), muhat(k,2), 'pu', al(k), eta0, eta1);
 
         % 2nd level
-        pihat(k,2) = hgf_pihat(pi(k-1,2), 1, ka(2), mu(k-1,3), om(2));
+        pihat(k,2) = hgf_pihat(pi(k-1,2), 1, ka(2), muhat(k,3), om(2));
         [pi(k,2), mu(k,2), da(k,2)] = hgf_binary_level2(muhat(k,2), pihat(k,2), ka(1), pihat(k,1), da(k,1));
 
         % Implied posterior precision at first level (for PU models, hgf variant)
@@ -99,13 +103,12 @@ for k = 2:1:n
         if l > 3
             % Pass through higher levels
             for j = 3:l-1
-                muhat(k,j) = hgf_prediction(mu(k-1,j), t(k), 'rho', rho(j));
-                pihat(k,j) = hgf_pihat(pi(k-1,j), t(k), ka(j), mu(k-1,j+1), om(j));
+                pihat(k,j) = hgf_pihat(pi(k-1,j), t(k), ka(j), muhat(k,j+1), om(j));
 
                 [pi(k,j), mu(k,j), v(k,j-1), w(k,j-1)] = hgf_volatility_update(...
                     muhat(k,j), pihat(k,j), ...
                     ka(j-1), pihat(k,j-1), da(k,j-1), ...
-                    mu(k-1,j), om(j-1), pi(k-1,j-1), ...
+                    om(j-1), pi(k-1,j-1), ...
                     pi(k,j-1), mu(k,j-1), muhat(k,j-1), t(k), update_type);
 
                 da(k,j) = hgf_volatility_pe(pi(k,j), mu(k,j), muhat(k,j), pihat(k,j));
@@ -113,16 +116,14 @@ for k = 2:1:n
         end
 
         % Last level
-        muhat(k,l) = hgf_prediction(mu(k-1,l), t(k), 'rho', rho(l));
         pihat(k,l) = hgf_pihat_last(pi(k-1,l), t(k), th);
 
         v(k,l)   = t(k) * th;
-        v(k,l-1) = t(k) * exp(ka(l-1) * mu(k-1,l) + om(l-1));
 
-        [pi(k,l), mu(k,l), ~, w(k,l-1)] = hgf_volatility_update(...
+        [pi(k,l), mu(k,l), v(k,l-1), w(k,l-1)] = hgf_volatility_update(...
             muhat(k,l), pihat(k,l), ...
             ka(l-1), pihat(k,l-1), da(k,l-1), ...
-            mu(k-1,l), om(l-1), pi(k-1,l-1), ...
+            om(l-1), pi(k-1,l-1), ...
             pi(k,l-1), mu(k,l-1), muhat(k,l-1), t(k), update_type);
 
         da(k,l) = hgf_volatility_pe(pi(k,l), mu(k,l), muhat(k,l), pihat(k,l));

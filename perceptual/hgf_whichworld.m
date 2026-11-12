@@ -108,13 +108,19 @@ for k = 2:1:n
         % Prediction errors
         da1(k,:) = mu1(k,:) -mu1hat(k,:);
 
+        % 3rd level prediction
+        % ~~~~~~~~~~~~~~~~~~~~
+        % The step size of the 2nd level depends on the value of the 3rd level
+        % at trial k, so its prediction comes first.
+        mu3hat(k) = mu3(k-1) +phi *(m -mu3(k-1));
+
         % 2nd level
         % ~~~~~~~~~
         % Predictions
         mu2hat(k,:) = mu2(k-1,:);
         
         % Precisions of predictions
-        pi2hat(k,:) = 1./(1./pi2(k-1,:) +exp(ka *mu3(k-1) +om));
+        pi2hat(k,:) = 1./(1./pi2(k-1,:) +exp(ka *mu3hat(k) +om));
 
         % Updates
         pi2(k,:) = pi2hat(k,:) +1./pi1hat(k,:);
@@ -127,14 +133,11 @@ for k = 2:1:n
 
         % 3rd level
         % ~~~~~~~~~
-        % Predictions
-        mu3hat(k) = mu3(k-1) +phi *(m -mu3(k-1));
-        
         % Precision of prediction
         pi3hat(k) = 1/(1/pi3(k-1) +th);
 
         % Weighting factors
-        v2(k)   = exp(ka *mu3(k-1) +om);
+        v2(k)   = exp(ka *mu3hat(k) +om);
         w2(k,:) = v2(k) *pi2hat(k,:);
 
         % Updates
